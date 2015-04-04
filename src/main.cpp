@@ -15,6 +15,9 @@ int main(int argc, char* argv[])
         aCmdArgs.push_back(argv[i]);
     }
 
+    std::cout << "Bienvenue a notre TP3 de INF4215!" << std::endl;
+    std::cout << "Cette console affichera des informations importantes sur le deroulement de la partie" << std::endl;
+
     try
     {
         Game& game = Game::Instance();
@@ -24,7 +27,7 @@ int main(int argc, char* argv[])
     }
     catch(Game::InitializeException& e)
     {
-        std::cout << "Error in Game initialization:" << std::endl;
+        std::cout << "Erreur dans l'initialization du jeu:" << std::endl;
         std::cout << e.what() << std::endl;
         return EXIT_FAILURE;
     }

@@ -4,10 +4,12 @@
 
 #include <exception>
 #include <memory>
+#include <random>
 
 namespace INF4215_TP3
 {
     class Room;
+    class Player;
 
     class Game
     {
@@ -19,6 +21,11 @@ namespace INF4215_TP3
         void Initialize(const std::vector<std::string>& args);
 
         void Run();
+
+        std::default_random_engine::result_type GetRandom()
+        {
+            return m_numberGenerator();
+        }
 
         class InitializeException : public std::exception
         {
@@ -37,6 +44,8 @@ namespace INF4215_TP3
         }
 
     private:
+        class GameHandler;
+
         Game();
         ~Game();
 
@@ -49,12 +58,18 @@ namespace INF4215_TP3
         void Render();
 
         sf::RenderWindow m_MainWindow;
-        std::unique_ptr<Room> m_pRoom;
 
+        std::unique_ptr<Room> m_pRoom;
+        std::unique_ptr<Player> m_pPlayer1;
+        std::unique_ptr<Player> m_pPlayer2;
+
+        std::default_random_engine m_numberGenerator;
         bool m_bInitialized;
 
         // Args results
         unsigned m_nMapSizeX;
         unsigned m_nMapSizeY;
+        unsigned m_nWantedSeed;
+        static const unsigned knDefaultSeed = 0;
     };
 }

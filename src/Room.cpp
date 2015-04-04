@@ -11,11 +11,11 @@
 
 namespace INF4215_TP3
 {
-    Room::Room(unsigned nSizeX, unsigned nSizeY)
+    Room::Room(sf::RenderTarget& view, unsigned nSizeX, unsigned nSizeY)
+        : m_View(view)
     {
         // Place the room in the middle of the window
-        auto& view = Game::Instance().GetWindow();
-        setPosition(view.mapPixelToCoords(sf::Vector2i(Game::knWindowX/2, Game::knWindowY/2)));
+        setPosition(m_View.mapPixelToCoords(sf::Vector2i(Game::knWindowX/2, Game::knWindowY/2)));
 
         // Initialize the room tiles to empty tiles
         for(unsigned i = 0; i < nSizeX; ++i)
@@ -27,11 +27,17 @@ namespace INF4215_TP3
 
     Room::~Room()
     {
+        Clean();
+    }
+
+    void Room::Clean() noexcept
+    {
         for(auto& vecColumn : m_a2pTiles)
         {
-            for(auto pTile : vecColumn)
+            for(auto& pTile : vecColumn)
             {
                 delete pTile;
+                pTile = nullptr;
             }
         }
     }
@@ -56,6 +62,8 @@ namespace INF4215_TP3
 
     void Room::GenerateRoom(size_t nSeed)
     {
+        Clean();
+
         // Temporary generator
         std::default_random_engine engine;
         if(nSeed != knDefaultSeed)
@@ -68,19 +76,13 @@ namespace INF4215_TP3
             engine.seed(seed);
         }
 
-        auto& view = Game::Instance().GetWindow();
-
         for(size_t i = 0; i < GetSizeX(); ++i)
         {
             auto& vecColumn = m_a2pTiles[i];
             for(size_t j = 0; j < GetSizeY(); ++j)
             {
                 auto& pTile = vecColumn[j];
-
-                int xOffset = static_cast<int>((-static_cast<double>(GetSizeX()) / 2.0 + i) * knTilePixelLength);
-                int yOffset = static_cast<int>((-static_cast<double>(GetSizeY()) / 2.0 + j) * knTilePixelLength);
-                const auto& pos = view.mapPixelToCoords(sf::Vector2i(xOffset, yOffset));
-
+                const auto& pos = GetCoordFromTilePos(i, j);
                 std::uniform_int_distribution<unsigned> distribution(1, 100);
                 const auto tileChoice = distribution(engine);
 
@@ -143,14 +145,22 @@ namespace INF4215_TP3
     {
         const auto nCurrentPos = x*GetSizeY() + y;
 
-        MergeIfValid(nCurrentPos, nCurrentPos - GetSizeY() - 1, groups);
-        MergeIfValid(nCurrentPos, nCurrentPos - GetSizeY(), groups);
-        MergeIfValid(nCurrentPos, nCurrentPos - GetSizeY() + 1, groups);
-        MergeIfValid(nCurrentPos, nCurrentPos - 1, groups);
-        MergeIfValid(nCurrentPos, nCurrentPos + 1, groups);
-        MergeIfValid(nCurrentPos, nCurrentPos + GetSizeY() - 1, groups);
-        MergeIfValid(nCurrentPos, nCurrentPos + GetSizeY(), groups);
-        MergeIfValid(nCurrentPos, nCurrentPos + GetSizeY() + 1, groups);
+        if(x != 0)
+        {
+            if(y != 0) MergeIfValid(nCurrentPos, nCurrentPos - GetSizeY() - 1, groups);
+            MergeIfValid(nCurrentPos, nCurrentPos - GetSizeY(), groups);
+            if(y != GetSizeY() - 1) MergeIfValid(nCurrentPos, nCurrentPos - GetSizeY() + 1, groups);
+        }
+
+        if(y != 0) MergeIfValid(nCurrentPos, nCurrentPos - 1, groups);
+        if(y != GetSizeY() - 1) MergeIfValid(nCurrentPos, nCurrentPos + 1, groups);
+
+        if(x != GetSizeX() - 1)
+        {
+            if(y != 0) MergeIfValid(nCurrentPos, nCurrentPos + GetSizeY() - 1, groups);
+            MergeIfValid(nCurrentPos, nCurrentPos + GetSizeY(), groups);
+            if(y != GetSizeY() - 1) MergeIfValid(nCurrentPos, nCurrentPos + GetSizeY() + 1, groups);
+        }
     }
 
     void Room::MergeIfValid(size_t source, size_t destination, Utility::DisjointSet& groups)
