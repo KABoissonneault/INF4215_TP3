@@ -73,12 +73,22 @@ namespace INF4215_TP3
 
         ITile* GetTile(size_t pos)
         {
-            if(pos >= TileCount())
-            {
-                return nullptr;
-            }
-
             return GetTile(pos/GetSizeY(), pos%GetSizeY());
+        }
+
+        const ITile* GetTile(size_t x, size_t y) const
+        {
+            return const_cast<Room* const>(this)->GetTile(x, y);
+        }
+
+        const ITile* GetTile(const sf::Vector2i& pos) const
+        {
+            return const_cast<Room* const>(this)->GetTile(pos);
+        }
+
+        const ITile* GetTile(size_t pos) const
+        {
+            return const_cast<Room* const>(this)->GetTile(pos);
         }
 
 

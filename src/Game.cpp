@@ -3,6 +3,7 @@
 #include "Room.h"
 #include "Tile.h"
 #include "Player.h"
+#include "GameHandler.h"
 
 #include <iostream>
 #include <cstdio>
@@ -25,13 +26,15 @@ namespace INF4215_TP3
 
     Game::Game()
         : m_MainWindow{sf::VideoMode(knWindowX, knWindowY), "INF4215 TP3"},
-        m_pRoom{nullptr},
+        m_aLastFrameKeys(knNumKeys, false),
+        m_aFrameKeys(knNumKeys, false),
         m_numberGenerator(std::chrono::system_clock::now().time_since_epoch().count()),
         m_bInitialized{false},
         m_nMapSizeX{5},
         m_nMapSizeY{5},
         m_nWantedSeed{knDefaultSeed}
     {
+        m_pGameHandler.reset(new GameHandler(*this));
     }
 
     Game::~Game()
@@ -49,50 +52,8 @@ namespace INF4215_TP3
             // Window settings
             m_MainWindow.setFramerateLimit(60);
 
-            // Room creation
-            m_pRoom.reset(new Room(m_MainWindow, m_nMapSizeX, m_nMapSizeY));
-
-            if(m_nWantedSeed == knDefaultSeed)
-            {
-                size_t nChosenSeed;
-                do
-                {
-                    nChosenSeed = GetRandom();
-                    m_pRoom->GenerateRoom(nChosenSeed);
-
-                } while (!m_pRoom->ValidateRoom());
-
-                std::cout << "La salle fut generee avec le seed: " << nChosenSeed << std::endl;
-            }
-            else
-            {
-                m_pRoom->GenerateRoom(m_nWantedSeed);
-                Render();
-                if(!m_pRoom->ValidateRoom())
-                {
-                    throw InitializeException("Le seed passe en argument ne donne pas une salle valide");
-                }
-            }
-
-            // Player creation
-            // Generate a player position until you spawn them on a non-solid tile
-            std::uniform_int_distribution<size_t> distributionPos(0, m_pRoom->TileCount() - 1);
-            size_t nPosPlayer1 = distributionPos(m_numberGenerator);
-            while(m_pRoom->GetTile(nPosPlayer1)->isSolid())
-            {
-                nPosPlayer1 = distributionPos(m_numberGenerator);
-            }
-            sf::Vector2i posPlayer1(nPosPlayer1/m_pRoom->GetSizeY(), nPosPlayer1%m_pRoom->GetSizeY());
-
-            size_t nPosPlayer2 = distributionPos(m_numberGenerator);
-            while(m_pRoom->GetTile(nPosPlayer2)->isSolid() || nPosPlayer2 == nPosPlayer1)
-            {
-                nPosPlayer2 = distributionPos(m_numberGenerator);
-            }
-            sf::Vector2i posPlayer2(nPosPlayer2/m_pRoom->GetSizeY(), nPosPlayer2%m_pRoom->GetSizeY());
-
-            m_pPlayer1.reset( new Player(*m_pRoom, Player::ID::Player1, Player::ControllerType::Input, posPlayer1) );
-            m_pPlayer2.reset( new Player(*m_pRoom, Player::ID::Player2, Player::ControllerType::Input, posPlayer2) );
+            // Game creation
+            m_pGameHandler->Initialize();
 
             m_bInitialized = true;
         }
@@ -155,11 +116,17 @@ namespace INF4215_TP3
 
     }
 
+    void Game::InitializeKeys()
+    {
+        for(unsigned i = 0; i < knNumKeys; ++i)
+        {
+            m_aLastFrameKeys[i] = m_aFrameKeys[i];
+        }
+    }
+
     void Game::Run()
     {
         assert(m_bInitialized && "Programme non initialize avant l'execution");
-
-        Render();
 
         while(m_MainWindow.isOpen())
         {
@@ -171,6 +138,7 @@ namespace INF4215_TP3
 
     void Game::PollEvents()
     {
+        InitializeKeys();
         sf::Event event;
         while (m_MainWindow.pollEvent(event))
         {
@@ -189,6 +157,21 @@ namespace INF4215_TP3
                         m_MainWindow.close();
                         break;
 
+                    case sf::Keyboard::Key::Numpad1:
+                    case sf::Keyboard::Key::Numpad2:
+                    case sf::Keyboard::Key::Numpad3:
+                    case sf::Keyboard::Key::Numpad4:
+                    case sf::Keyboard::Key::Numpad6:
+                    case sf::Keyboard::Key::Numpad7:
+                    case sf::Keyboard::Key::Numpad8:
+                    case sf::Keyboard::Key::Numpad9:
+                        {
+                            unsigned keyID = event.key.code - sf::Keyboard::Key::Numpad0;
+                            m_aFrameKeys[keyID] = true;
+                        }
+                        break;
+
+
                     default:
                         break;
                     }
@@ -196,6 +179,30 @@ namespace INF4215_TP3
                 }
                 break;
 
+            case sf::Event::KeyReleased:
+                {
+                    switch(event.key.code)
+                    {
+
+                    case sf::Keyboard::Key::Numpad1:
+                    case sf::Keyboard::Key::Numpad2:
+                    case sf::Keyboard::Key::Numpad3:
+                    case sf::Keyboard::Key::Numpad4:
+                    case sf::Keyboard::Key::Numpad6:
+                    case sf::Keyboard::Key::Numpad7:
+                    case sf::Keyboard::Key::Numpad8:
+                    case sf::Keyboard::Key::Numpad9:
+                        {
+                            unsigned keyID = event.key.code - sf::Keyboard::Key::Numpad0;
+                            m_aFrameKeys[keyID] = false;
+                        }
+                        break;
+
+
+                    default:
+                        break;
+                    }
+                }
             default:
                 break;
             }
@@ -204,18 +211,14 @@ namespace INF4215_TP3
 
     void Game::Update()
     {
-
+        m_pGameHandler->Update();
     }
 
     void Game::Render()
     {
         m_MainWindow.clear();
 
-        m_pRoom->Render(m_MainWindow);
-
-        // Draw players
-        m_MainWindow.draw(m_pPlayer1->GetSprite(), m_pRoom->getTransform());
-        m_MainWindow.draw(m_pPlayer2->GetSprite(), m_pRoom->getTransform());
+        m_pGameHandler->Render();
 
         m_MainWindow.display();
     }

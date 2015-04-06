@@ -26,9 +26,13 @@ namespace INF4215_TP3
             AI_Type2
         };
 
-        Player(Room&, ID, ControllerType, const sf::Vector2i& initialPosition);
+        Player(const Room&, ID, ControllerType, const sf::Vector2i& initialPosition);
+        ~Player();
 
-        std::unique_ptr<Action> GetAction();
+        void Render(sf::RenderTarget&, const sf::Transform&);
+
+        std::unique_ptr<Action> ChooseAction();
+        void ExecuteAction(const Action&);
 
         void Stun(unsigned nTurnCount) noexcept;
 
@@ -37,19 +41,24 @@ namespace INF4215_TP3
             return m_Sprite;
         }
 
-        ID GetPosition() const noexcept
+        ID GetID() const noexcept
         {
             return m_eID;
+        }
+
+        const Room& GetRoom() const noexcept
+        {
+            return m_Room;
         }
 
     private:
         void SetPosition(const sf::Vector2i&);
 
-        Room& m_Room;
+        const Room& m_Room;
         sf::Vector2i m_Position;
         sf::Texture m_Texture;
         sf::Sprite m_Sprite;
-        //std::unique_ptr<IController> m_pController;
+        std::unique_ptr<IController> m_pController;
         unsigned m_nStunTurnCount;
         ID m_eID;
     };

@@ -14,6 +14,7 @@ namespace INF4215_TP3
     public:
         virtual ~ITile() = default;
         virtual bool isSolid() const noexcept = 0;
+        virtual bool isTreasure() const noexcept = 0;
         virtual void OnEnter(Player& player) = 0;
         // Returns true if a trap was detected on this tile
         // Can use random probabilities

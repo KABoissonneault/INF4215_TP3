@@ -15,6 +15,11 @@ namespace INF4215_TP3
             return false;
         }
 
+        virtual bool isTreasure() const noexcept override
+        {
+            return false;
+        }
+
         virtual void OnEnter(Player&) override
         {
 

@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <vector>
 #include <exception>
 #include <memory>
 #include <random>
@@ -22,9 +23,16 @@ namespace INF4215_TP3
 
         void Run();
 
-        std::default_random_engine::result_type GetRandom()
+        // La valeur du numpad (donc 1-9)
+        static const unsigned knNumKeys = 10;
+        bool NumpadWasPressed(unsigned key)
         {
-            return m_numberGenerator();
+            return !m_aLastFrameKeys[key] && m_aFrameKeys[key];
+        }
+
+        std::default_random_engine::result_type GetRandom() const
+        {
+            return const_cast<Game* const>(this)->m_numberGenerator();
         }
 
         class InitializeException : public std::exception
@@ -52,6 +60,7 @@ namespace INF4215_TP3
         void ParseArgs(const std::vector<std::string>& args);
 
         void Clean();
+        void InitializeKeys();
 
         void PollEvents();
         void Update();
@@ -59,9 +68,12 @@ namespace INF4215_TP3
 
         sf::RenderWindow m_MainWindow;
 
-        std::unique_ptr<Room> m_pRoom;
-        std::unique_ptr<Player> m_pPlayer1;
-        std::unique_ptr<Player> m_pPlayer2;
+        // Takes care of the game flow
+        // Unlike Game itself which handle the "app" flow
+        std::unique_ptr<GameHandler> m_pGameHandler;
+
+        std::vector<bool> m_aLastFrameKeys;
+        std::vector<bool> m_aFrameKeys;
 
         std::default_random_engine m_numberGenerator;
         bool m_bInitialized;
