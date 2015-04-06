@@ -51,6 +51,11 @@ namespace INF4215_TP3
             return m_MainWindow;
         }
 
+        unsigned GetMaxTrail() const
+        {
+            return m_nTrailMaxLength;
+        }
+
     private:
         class GameHandler;
 
@@ -82,6 +87,7 @@ namespace INF4215_TP3
         unsigned m_nMapSizeX;
         unsigned m_nMapSizeY;
         unsigned m_nWantedSeed;
+        unsigned m_nTrailMaxLength;
         static const unsigned knDefaultSeed = 0;
     };
 }

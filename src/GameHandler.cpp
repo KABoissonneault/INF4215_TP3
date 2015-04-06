@@ -94,7 +94,7 @@ namespace INF4215_TP3
         m_pRoom->Render(m_Game.m_MainWindow);
 
         // Draw players
-        m_Game.m_MainWindow.draw(m_pPlayer1->GetSprite(), m_pRoom->getTransform());
-        m_Game.m_MainWindow.draw(m_pPlayer2->GetSprite(), m_pRoom->getTransform());
+        m_pPlayer1->Render(m_Game.m_MainWindow, m_pRoom->getTransform());
+        m_pPlayer2->Render(m_Game.m_MainWindow, m_pRoom->getTransform());
     }
 }

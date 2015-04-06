@@ -52,6 +52,11 @@ namespace INF4215_TP3
             return GetCoordFromTilePos(pos/GetSizeX(), pos%GetSizeY());
         }
 
+        sf::Vector2f GetCoordFromTilePos(sf::Vector2i pos) const
+        {
+            return GetCoordFromTilePos(pos.x, pos.y);
+        }
+
         void GenerateRoom(size_t seed = knDefaultSeed);
         bool ValidateRoom();
         static const size_t knDefaultSeed = 0;

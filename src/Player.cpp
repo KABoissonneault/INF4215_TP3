@@ -5,6 +5,9 @@
 #include "ControllerInput.h"
 #include "Room.h"
 #include "Tile.h"
+#include "Interpolation.h"
+#include "Trail.h"
+#include "Game.h"
 
 #include <cmath>
 #include <cassert>
@@ -22,7 +25,9 @@ namespace INF4215_TP3
         m_Texture.loadFromFile(eID == ID::Player1 ? "src/Player1.png" : "src/Player2.png");
         m_Sprite.setTexture(m_Texture);
 
-        SetPosition(initialPosition);
+        m_Position = initialPosition;
+        m_Sprite.setPosition( m_Room.GetCoordFromTilePos(m_Position.x, m_Position.y) );
+
 
         // TODO: Assign controller
         if(eControlType == ControllerType::Input)
@@ -36,13 +41,37 @@ namespace INF4215_TP3
         }
     }
 
-    Player::~Player() = default;
+    Player::~Player()
+    {
+        for(auto pTrail : m_queueTrails)
+        {
+            delete pTrail;
+        }
+    }
 
+    void Player::Render(sf::RenderTarget& view, const sf::Transform& context)
+    {
+        for(auto pTrail : m_queueTrails)
+        {
+            pTrail->Render(view, context);
+        }
+
+        // Interpolate it closer to destination
+        m_Sprite.setPosition(Utility::WeightedAverageInterpolate(m_Sprite.getPosition(), m_Room.GetCoordFromTilePos(m_Position.x, m_Position.y), 4));
+
+        view.draw(m_Sprite, context);
+    }
 
     void Player::SetPosition(const sf::Vector2i& pos)
     {
-        m_Position = pos;
+        // Start sprite transition to destination
+        // Make sure the sprite starts from the current position in case it hasn't reached it yet
         m_Sprite.setPosition( m_Room.GetCoordFromTilePos(m_Position.x, m_Position.y) );
+
+        // Render will make sure to move the sprite towards the current position
+
+        // now assign the destination
+        m_Position = pos;
     }
 
     std::unique_ptr<Action> Player::ChooseAction()
@@ -84,7 +113,29 @@ namespace INF4215_TP3
         const auto pTile = m_Room.GetTile(newPos);
         if( pTile && !(pTile->isSolid()) )
         {
+            // On ajoute une trail
+            AddTrail(eAction);
+
             SetPosition(newPos);
+        }
+
+
+    }
+
+    void Player::AddTrail(const Action& action)
+    {
+        const unsigned knMaxTrail = Game::Instance().GetMaxTrail();
+        if(knMaxTrail == 0)
+        {
+            return;
+        }
+
+        m_queueTrails.push_back(new Trail(*this, action));
+
+        while(m_queueTrails.size() > knMaxTrail)
+        {
+            delete m_queueTrails.front();
+            m_queueTrails.pop_front();
         }
     }
 

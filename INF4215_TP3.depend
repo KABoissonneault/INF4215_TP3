@@ -361,7 +361,7 @@
 	<exception>
 	<vector>
 
-1428257323 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\game.h
+1428348264 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\game.h
 	<SFML/Graphics.hpp>
 	<vector>
 	<exception>
@@ -731,7 +731,7 @@
 	<random>
 	<chrono>
 
-1428248926 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\room.h
+1428347712 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\room.h
 	<SFML/Graphics.hpp>
 	<vector>
 	<memory>
@@ -745,7 +745,7 @@
 1428086037 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\tile.cpp
 	"Tile.h"
 
-1428265085 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\game.cpp
+1428348861 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\game.cpp
 	"Game.h"
 	"Room.h"
 	"Tile.h"
@@ -771,19 +771,23 @@
 1428182483 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\disjointset.h
 	<memory>
 
-1428255735 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\player.cpp
+1428349960 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\player.cpp
 	"Player.h"
 	"Action.h"
 	"Controller.h"
 	"ControllerInput.h"
 	"Room.h"
 	"Tile.h"
+	"Interpolation.h"
+	"Trail.h"
+	"Game.h"
 	<cmath>
 	<cassert>
 
-1428271003 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\player.h
+1428349037 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\player.h
 	<SFML/Graphics.hpp>
 	<memory>
+	<list>
 
 1428254957 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\action.h
 
@@ -803,11 +807,24 @@
 	<memory>
 	"Game.h"
 
-1428255948 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\gamehandler.cpp
+1428338010 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\gamehandler.cpp
 	"GameHandler.h"
 	"Player.h"
 	"Room.h"
 	"Tile.h"
 	"Action.h"
 	<iostream>
+
+1428337779 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\interpolation.h
+	<SFML/System/Vector2.hpp>
+
+1428347771 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\trail.h
+	<SFML/Graphics.hpp>
+
+1428349404 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\trail.cpp
+	"Trail.h"
+	"Player.h"
+	"Action.h"
+	"Room.h"
+	<mutex>
 

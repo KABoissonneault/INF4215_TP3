@@ -32,7 +32,8 @@ namespace INF4215_TP3
         m_bInitialized{false},
         m_nMapSizeX{5},
         m_nMapSizeY{5},
-        m_nWantedSeed{knDefaultSeed}
+        m_nWantedSeed{knDefaultSeed},
+        m_nTrailMaxLength{0}
     {
         m_pGameHandler.reset(new GameHandler(*this));
     }
@@ -100,6 +101,20 @@ namespace INF4215_TP3
                     }
 
                     std::cout << "Le seed de la salle cree sera " << m_nWantedSeed << std::endl;
+
+                    ++i;
+                }
+                else if(arg == "max_trail")
+                {
+                    const std::string& sLength = args.at(i+1);
+
+                    auto nResult = sscanf( sLength.c_str(), "%u", &m_nTrailMaxLength);
+                    if(nResult != 1)
+                    {
+                        throw std::runtime_error("Le premier argument suivant \"max_trail\" n'etait pas un nombre");
+                    }
+
+                    std::cout << "La taille maximale des trails sera " << m_nTrailMaxLength << std::endl;
 
                     ++i;
                 }
