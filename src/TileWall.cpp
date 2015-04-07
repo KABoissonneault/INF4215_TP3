@@ -12,8 +12,8 @@ namespace INF4215_TP3
 
     sf::Texture TileWall::s_texture;
 
-    TileWall::TileWall(const sf::Vector2f& pos)
-        : ITile(GetTexture(), pos)
+    TileWall::TileWall(const Room& room, const sf::Vector2i& pos)
+        : ITile(GetTexture(), room, pos, TileType::Wall)
     {
 
     }

@@ -7,7 +7,7 @@ namespace INF4215_TP3
     class TileFloor : public ITile
     {
     public:
-        TileFloor(const sf::Vector2f&);
+        TileFloor(const Room&, const sf::Vector2i&);
         virtual ~TileFloor() = default;
 
         virtual bool isSolid() const noexcept override
@@ -15,19 +15,9 @@ namespace INF4215_TP3
             return false;
         }
 
-        virtual bool isTreasure() const noexcept override
-        {
-            return false;
-        }
-
         virtual void OnEnter(Player&) override
         {
 
-        }
-
-        virtual bool OnDetectTrap() override
-        {
-            return false;
         }
 
     private:

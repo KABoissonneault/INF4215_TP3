@@ -24,54 +24,57 @@ namespace INF4215_TP3
            s_textPlayer2Trail.loadFromFile("src/Trail2.png");
         });
 
-        const int length = static_cast<int>(Room::knTilePixelLength);
-        const unsigned nOutDir = static_cast<unsigned>(action.ChosenDirection);
-        sf::Vector2i nextPos = player.GetPosition();
-        int xSourceOut;
-        int ySourceOut;
-        if(nOutDir & static_cast<unsigned>(Action::Direction::Left))
-        {
-            xSourceOut = 0;
-            --nextPos.x;
-        }
-        else if(nOutDir & static_cast<unsigned>(Action::Direction::Right))
-        {
-            xSourceOut = 2*length;
-            ++nextPos.x;
-        }
-        else
-        {
-            xSourceOut = length;
-        }
-
-        if(nOutDir & static_cast<unsigned>(Action::Direction::Top))
-        {
-            ySourceOut = 0;
-            --nextPos.y;
-        }
-        else if(nOutDir & static_cast<unsigned>(Action::Direction::Bottom))
-        {
-            ySourceOut = 2 * length;
-            ++nextPos.y;
-        }
-        else
-        {
-            ySourceOut = length;
-        }
-
         const sf::Texture& chosenTexture = player.GetID() == Player::ID::Player1 ? s_textPlayer1Trail : s_textPlayer2Trail;
+        const int length = static_cast<int>(Room::knTilePixelLength);
 
         m_spriteSourceTrail.setTexture(chosenTexture);
-        m_spriteSourceTrail.setTextureRect(sf::IntRect(sf::Vector2i(length, length), sf::Vector2i(length, length)));
+        m_spriteSourceTrail.setTextureRect(sf::IntRect(length, length, length, length));
         m_spriteSourceTrail.setPosition(player.GetRoom().GetCoordFromTilePos(player.GetPosition()));
 
-        m_spriteSourceOutTrail.setTexture(chosenTexture);
-        m_spriteSourceOutTrail.setTextureRect(sf::IntRect(sf::Vector2i(xSourceOut, ySourceOut), sf::Vector2i(length, length)));
-        m_spriteSourceOutTrail.setPosition(player.GetRoom().GetCoordFromTilePos(player.GetPosition()));
+        if(action.ChosenDirection != Action::Direction::Idle)
+        {
+            const unsigned nOutDir = static_cast<unsigned>(action.ChosenDirection);
+            sf::Vector2i nextPos = player.GetPosition();
+            int xSourceOut;
+            int ySourceOut;
+            if(nOutDir & static_cast<unsigned>(Action::Direction::Left))
+            {
+                xSourceOut = 0;
+                --nextPos.x;
+            }
+            else if(nOutDir & static_cast<unsigned>(Action::Direction::Right))
+            {
+                xSourceOut = 2*length;
+                ++nextPos.x;
+            }
+            else
+            {
+                xSourceOut = length;
+            }
 
-        m_spriteDestinationInTrail.setTexture(chosenTexture);
-        m_spriteDestinationInTrail.setTextureRect(sf::IntRect(sf::Vector2i(2*length - xSourceOut, 2*length - ySourceOut), sf::Vector2i(length, length)));
-        m_spriteDestinationInTrail.setPosition(player.GetRoom().GetCoordFromTilePos(nextPos));
+            if(nOutDir & static_cast<unsigned>(Action::Direction::Top))
+            {
+                ySourceOut = 0;
+                --nextPos.y;
+            }
+            else if(nOutDir & static_cast<unsigned>(Action::Direction::Bottom))
+            {
+                ySourceOut = 2 * length;
+                ++nextPos.y;
+            }
+            else
+            {
+                ySourceOut = length;
+            }
+
+            m_spriteSourceOutTrail.setTexture(chosenTexture);
+            m_spriteSourceOutTrail.setTextureRect(sf::IntRect(xSourceOut, ySourceOut, length, length));
+            m_spriteSourceOutTrail.setPosition(player.GetRoom().GetCoordFromTilePos(player.GetPosition()));
+
+            m_spriteDestinationInTrail.setTexture(chosenTexture);
+            m_spriteDestinationInTrail.setTextureRect(sf::IntRect(2*length - xSourceOut, 2*length - ySourceOut, length, length));
+            m_spriteDestinationInTrail.setPosition(player.GetRoom().GetCoordFromTilePos(nextPos));
+        }
     }
 
     void Trail::Render(sf::RenderTarget& view, const sf::Transform& context)

@@ -17,6 +17,7 @@ int main(int argc, char* argv[])
 
     std::cout << "Bienvenue a notre TP3 de INF4215!" << std::endl;
     std::cout << "Cette console affichera des informations importantes sur le deroulement de la partie" << std::endl;
+    std::cout << std::endl;
 
     try
     {

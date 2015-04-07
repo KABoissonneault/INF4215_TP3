@@ -6,6 +6,7 @@
 #include <exception>
 #include <memory>
 #include <random>
+//#include <chrono>
 
 namespace INF4215_TP3
 {
@@ -16,8 +17,11 @@ namespace INF4215_TP3
     {
     public:
         static Game& Instance();
-        static const unsigned knWindowX = 800;
-        static const unsigned knWindowY = 600;
+
+    public:
+        static const unsigned& knWindowX;
+        static const unsigned& knWindowY;
+
 
         void Initialize(const std::vector<std::string>& args);
 
@@ -72,6 +76,11 @@ namespace INF4215_TP3
         void Render();
 
         sf::RenderWindow m_MainWindow;
+        sf::Font m_MainFont;
+        sf::Text m_PauseText;
+        sf::Text m_LoadingText;
+
+        //std::chrono::high_resolution_clock::time_point m_timeNextUpdateMinimum;
 
         // Takes care of the game flow
         // Unlike Game itself which handle the "app" flow
@@ -82,12 +91,18 @@ namespace INF4215_TP3
 
         std::default_random_engine m_numberGenerator;
         bool m_bInitialized;
+        bool m_bPause;
 
         // Args results
         unsigned m_nMapSizeX;
         unsigned m_nMapSizeY;
         unsigned m_nWantedSeed;
         unsigned m_nTrailMaxLength;
+        unsigned m_nMSMinimumDelay;
+
+        static unsigned s_nWindowX;
+        static unsigned s_nWindowY;
+
         static const unsigned knDefaultSeed = 0;
     };
 }

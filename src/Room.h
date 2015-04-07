@@ -8,6 +8,7 @@
 namespace INF4215_TP3
 {
     class ITile;
+    class TileFloor;
 
     namespace Utility
     {
@@ -35,7 +36,7 @@ namespace INF4215_TP3
             return m_a2pTiles[0].size();
         }
 
-        size_t TileCount() const noexcept
+        size_t GetTileCount() const noexcept
         {
             return GetSizeX() * GetSizeY();
         }
@@ -96,12 +97,30 @@ namespace INF4215_TP3
             return const_cast<Room* const>(this)->GetTile(pos);
         }
 
+        const sf::Vector2i& GetStartPositionPlayer1() const
+        {
+            return m_Player1StartPosition;
+        }
+
+        const sf::Vector2i& GetStartPositionPlayer2() const
+        {
+            return m_Player2StartPosition;
+        }
+
+        TileFloor* GetRandomFloorTile();
 
     private:
+        void GenerateFloorsAndWalls(std::default_random_engine& engine);
+        void GenerateTreasures(std::default_random_engine& engine);
+        void GeneratePlayerSpawns(std::default_random_engine& engine);
+
         void GroupTile(size_t x, size_t y, Utility::DisjointSet& groups);
         void MergeIfValid(size_t source, size_t destination, Utility::DisjointSet& groups);
 
         sf::RenderTarget& m_View;
         std::vector<std::vector<ITile*>> m_a2pTiles;
+
+        sf::Vector2i m_Player1StartPosition;
+        sf::Vector2i m_Player2StartPosition;
     };
 }

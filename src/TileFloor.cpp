@@ -1,5 +1,6 @@
 #include "TileFloor.h"
 
+#include "Room.h"
 #include <mutex>
 
 namespace INF4215_TP3
@@ -12,8 +13,8 @@ namespace INF4215_TP3
 
     sf::Texture TileFloor::s_texture;
 
-    TileFloor::TileFloor(const sf::Vector2f& pos)
-        : ITile(GetTexture(), pos)
+    TileFloor::TileFloor(const Room& room, const sf::Vector2i& pos)
+        : ITile(GetTexture(), room, pos, TileType::Floor)
     {
 
     }

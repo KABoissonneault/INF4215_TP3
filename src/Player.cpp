@@ -16,8 +16,10 @@ namespace INF4215_TP3
 {
     Player::Player(const Room& room, ID eID, ControllerType eControlType, const sf::Vector2i& initialPosition)
         : m_Room{room},
+        m_eID{eID},
         m_nStunTurnCount{0},
-        m_eID{eID}
+        m_nTreasureCount{0},
+        m_nWeaponCount{0}
     {
         // Assert the player was spawned in a valid position
         assert(!m_Room.GetTile(initialPosition)->isSolid());
@@ -118,8 +120,6 @@ namespace INF4215_TP3
 
             SetPosition(newPos);
         }
-
-
     }
 
     void Player::AddTrail(const Action& action)

@@ -17,8 +17,8 @@ namespace INF4215_TP3
     public:
         enum class ID : unsigned
         {
-            Player1,
-            Player2
+            Player1 = 1,
+            Player2 = 2
         };
 
         enum class ControllerType
@@ -58,6 +58,26 @@ namespace INF4215_TP3
             return m_Position;
         }
 
+        void AddTreasure(unsigned n) noexcept
+        {
+            m_nTreasureCount += n;
+        }
+
+        void AddWeapon(unsigned n) noexcept
+        {
+            m_nWeaponCount += n;
+        }
+
+        unsigned GetTreasure() const noexcept
+        {
+            return m_nTreasureCount;
+        }
+
+        unsigned GetWeapon() const noexcept
+        {
+            return m_nWeaponCount;
+        }
+
     private:
         void SetPosition(const sf::Vector2i&);
         void AddTrail(const Action&);
@@ -68,7 +88,11 @@ namespace INF4215_TP3
         sf::Texture m_Texture;
         sf::Sprite m_Sprite;
         std::unique_ptr<IController> m_pController;
-        unsigned m_nStunTurnCount;
         const ID m_eID;
+
+        unsigned m_nStunTurnCount;
+        unsigned m_nTreasureCount;
+        unsigned m_nWeaponCount;
+
     };
 }
