@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="mingw-w64" />
-				<Option parameters="window_size 1024 768 size 30 22 max_trail 8 seed 881970879" />
+				<Option parameters="window_size 1024 768 size 30 22 max_trail 8 seed 881970879 build_debug" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
@@ -72,6 +72,8 @@
 		<Unit filename="src/Tile.h" />
 		<Unit filename="src/TileFloor.cpp" />
 		<Unit filename="src/TileFloor.h" />
+		<Unit filename="src/TileMonster.cpp" />
+		<Unit filename="src/TileMonster.h" />
 		<Unit filename="src/TileTreasure.cpp" />
 		<Unit filename="src/TileTreasure.h" />
 		<Unit filename="src/TileWall.cpp" />

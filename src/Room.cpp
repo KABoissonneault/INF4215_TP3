@@ -4,9 +4,11 @@
 #include "TileFloor.h"
 #include "TileWall.h"
 #include "TileTreasure.h"
+#include "TileMonster.h"
 #include "Game.h"
 #include "DisjointSet.h"
 
+#include <iostream>
 #include <random>
 #include <chrono>
 #include <cmath>
@@ -44,6 +46,14 @@ namespace INF4215_TP3
         }
     }
 
+    void Room::DebugOutput(const std::string& sOutput)
+    {
+        if(Game::Instance().HasBuildDebug())
+        {
+            std::cout << sOutput << std::endl;
+        }
+    }
+
     void Room::Render(sf::RenderTarget& window)
     {
         for(size_t i = 0; i < GetSizeX(); ++i)
@@ -62,7 +72,7 @@ namespace INF4215_TP3
         }
     }
 
-    void Room::GenerateRoom(size_t nSeed)
+    bool Room::GenerateRoom(size_t nSeed)
     {
         Clean();
 
@@ -80,11 +90,22 @@ namespace INF4215_TP3
         // Place floors and walls
         GenerateFloorsAndWalls(engine);
 
+        // Validate room now. If a floor tile is isolated
+        // from the rest, this seed is invalid
+        const auto bResult = ValidateRoom();
+        if(!bResult)
+            return false;
+
         // Place some treasures
         GenerateTreasures(engine);
 
+        // Place some monsters
+        GenerateMonsters(engine);
+
         // Place players at two random valid spots
         GeneratePlayerSpawns(engine);
+
+        return true;
     }
 
     void Room::GenerateFloorsAndWalls(std::default_random_engine& engine)
@@ -117,32 +138,85 @@ namespace INF4215_TP3
         std::normal_distribution<> distTreasureValue( 3.0, 1.0 );
         std::uniform_int_distribution<unsigned> distTreasureType(1, 100);
         const unsigned knTreasureCount = static_cast<unsigned>(std::max(1.0, std::round(distTreasureCount(engine))));
+
+        DebugOutput( "Generating " + std::to_string(knTreasureCount) + " treasures" );
+
         for(unsigned i = 0; i < knTreasureCount; ++i)
         {
-            const sf::Vector2i pos = GetRandomFloorTile()->GetPosition();
+            // Find a random floor tile to replace with a treasure
+            const sf::Vector2i pos = GetRandomFloorTile(engine)->GetPosition();
             auto& pTile = m_a2pTiles[pos.x][pos.y];
 
             // Free the floor tile
             delete pTile;
 
+            // Roll for the treasure type that's going to be chosen
             const unsigned nTreasureType = distTreasureType(engine);
             if(nTreasureType < 41)
             {
                 const unsigned nTreasureValue = static_cast<unsigned>(std::max(1.0, std::round(distTreasureValue(engine))));
                 pTile = new TileTreasure(*this, pos, nTreasureValue, 0);
+
+                DebugOutput( "\tGenerating treasure with value " + std::to_string(nTreasureValue) );
             }
             else if(nTreasureType < 81)
             {
                 const unsigned nWeaponValue = static_cast<unsigned>(std::max(1.0, std::round(distTreasureValue(engine))));
                 pTile = new TileTreasure(*this, pos, 0, nWeaponValue);
+
+                DebugOutput( "\tGenerating weaponry with value " + std::to_string(nWeaponValue) );
             }
             else
             {
                 const unsigned nTreasureValue = static_cast<unsigned>(std::max(1.0, std::round(distTreasureValue(engine))))/2;
                 const unsigned nWeaponValue = static_cast<unsigned>(std::max(1.0, std::round(distTreasureValue(engine))))/2;
                 pTile = new TileTreasure(*this, pos, nTreasureValue, nWeaponValue);
-            }
 
+                DebugOutput( "\tGenerating loot with value {" + std::to_string(nTreasureValue) + ", " + std::to_string(nWeaponValue) + "}" );
+            }
+        }
+    }
+
+    void Room::GenerateMonsters(std::default_random_engine& engine)
+    {
+        std::normal_distribution<> distMonsterCount( static_cast<double>(GetTileCount()) / 80.0, static_cast<double>(GetTileCount()) / 160.0 );
+        std::normal_distribution<> distMonsterValue( 4.0, 1.0 );
+        const unsigned knMonsterCount = static_cast<unsigned>(std::max(1.0, std::round(distMonsterCount(engine))));
+
+        DebugOutput( "Generating " + std::to_string(knMonsterCount) + " monsters" );
+
+        for(unsigned i = 0; i < knMonsterCount; ++i)
+        {
+            bool bPlaced = false;
+            while(!bPlaced)
+            {
+                // Find a random floor tile to replace with a monster tile
+                const sf::Vector2i pos = GetRandomFloorTile(engine)->GetPosition();
+                auto& pPotentialTile = m_a2pTiles[pos.x][pos.y];
+                const auto pOldFloorTile = pPotentialTile; // Cache the old floor tile for restoration in case of failure
+
+                // Try replacing the tile with a wall. If the map remains valid,
+                // that means that the current tile does not block any way.
+                // Therefore, it is a valid spot for placing a monster
+                pPotentialTile = new TileFloor(*this, pos);
+
+                const auto bResult = ValidateRoom();
+                if(bResult)
+                {
+                    delete pOldFloorTile;
+                    delete pPotentialTile; // Delete the wall that was there
+                    const unsigned knStrength = static_cast<unsigned>(std::max(1.0, std::round(distMonsterValue(engine))));
+                    pPotentialTile = new TileMonster(*this, pos, knStrength);
+                    bPlaced = true;
+
+                    DebugOutput( "\tGenerating monster with strength " + std::to_string(knStrength) );
+                }
+                else
+                {
+                    delete pPotentialTile;
+                    pPotentialTile = pOldFloorTile;
+                }
+            }
         }
     }
 
@@ -260,6 +334,21 @@ namespace INF4215_TP3
         {
             x = Game::Instance().GetRandom() % (GetSizeX() - 1);
             y = Game::Instance().GetRandom() % (GetSizeY() - 1);
+        }while(GetTile(x, y)->GetTileType() != TileType::Floor);
+
+        return static_cast<TileFloor*>(GetTile(x, y));
+    }
+
+    TileFloor* Room::GetRandomFloorTile(std::default_random_engine& engine)
+    {
+        std::uniform_int_distribution<size_t> distPositionX(0, GetSizeX() - 1);
+        std::uniform_int_distribution<size_t> distPositionY(0, GetSizeY() - 1);
+        size_t x;
+        size_t y;
+        do
+        {
+            x = distPositionX(engine);
+            y = distPositionY(engine);
         }while(GetTile(x, y)->GetTileType() != TileType::Floor);
 
         return static_cast<TileFloor*>(GetTile(x, y));

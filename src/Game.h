@@ -60,6 +60,11 @@ namespace INF4215_TP3
             return m_nTrailMaxLength;
         }
 
+        bool HasBuildDebug() const
+        {
+            return m_bBuildDebug;
+        }
+
     private:
         class GameHandler;
 
@@ -99,6 +104,7 @@ namespace INF4215_TP3
         unsigned m_nWantedSeed;
         unsigned m_nTrailMaxLength;
         unsigned m_nMSMinimumDelay;
+        bool m_bBuildDebug;
 
         static unsigned s_nWindowX;
         static unsigned s_nWindowY;

@@ -40,7 +40,8 @@ namespace INF4215_TP3
         m_nMapSizeX{5},
         m_nMapSizeY{5},
         m_nWantedSeed{knDefaultSeed},
-        m_nTrailMaxLength{0}
+        m_nTrailMaxLength{0},
+        m_bBuildDebug{false}
     {
         m_pGameHandler.reset(new GameHandler(*this));
     }
@@ -185,6 +186,10 @@ namespace INF4215_TP3
                     std::cout << "Le delais minimal entre 2 tours sera " << m_nMSMinimumDelay << std::endl;
 
                     ++i;
+                }
+                else if(arg == "build_debug")
+                {
+                    m_bBuildDebug = true;
                 }
                 else
                 {

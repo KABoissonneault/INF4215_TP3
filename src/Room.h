@@ -9,6 +9,7 @@ namespace INF4215_TP3
 {
     class ITile;
     class TileFloor;
+    class Player;
 
     namespace Utility
     {
@@ -58,8 +59,8 @@ namespace INF4215_TP3
             return GetCoordFromTilePos(pos.x, pos.y);
         }
 
-        void GenerateRoom(size_t seed = knDefaultSeed);
-        bool ValidateRoom();
+        bool GenerateRoom(size_t seed = knDefaultSeed);
+
         static const size_t knDefaultSeed = 0;
 
         ITile* GetTile(size_t x, size_t y)
@@ -112,7 +113,15 @@ namespace INF4215_TP3
     private:
         void GenerateFloorsAndWalls(std::default_random_engine& engine);
         void GenerateTreasures(std::default_random_engine& engine);
+        void GenerateMonsters(std::default_random_engine& engine);
         void GeneratePlayerSpawns(std::default_random_engine& engine);
+
+        bool ValidateRoom();
+
+        void DebugOutput(const std::string&);
+
+        // For seed consistency
+        TileFloor* GetRandomFloorTile(std::default_random_engine& engine);
 
         void GroupTile(size_t x, size_t y, Utility::DisjointSet& groups);
         void MergeIfValid(size_t source, size_t destination, Utility::DisjointSet& groups);

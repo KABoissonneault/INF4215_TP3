@@ -11,7 +11,8 @@ namespace INF4215_TP3
     {
         Floor,
         Wall,
-        Treasure
+        Treasure,
+        Monster
     };
     class ITile
     {

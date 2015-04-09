@@ -361,7 +361,7 @@
 	<exception>
 	<vector>
 
-1428362253 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\game.h
+1428543243 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\game.h
 	<SFML/Graphics.hpp>
 	<vector>
 	<exception>
@@ -721,24 +721,26 @@
 	<string>
 	<vector>
 
-1428369476 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\room.cpp
+1428543694 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\room.cpp
 	"Room.h"
 	"Tile.h"
 	"TileFloor.h"
 	"TileWall.h"
 	"TileTreasure.h"
+	"TileMonster.h"
 	"Game.h"
 	"DisjointSet.h"
+	<iostream>
 	<random>
 	<chrono>
 	<cmath>
 
-1428369273 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\room.h
+1428543277 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\room.h
 	<SFML/Graphics.hpp>
 	<vector>
 	<memory>
 
-1428366805 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\tile.h
+1428454780 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\tile.h
 	<SFML/Graphics.hpp>
 
 1428366046 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\tilefloor.h
@@ -748,7 +750,7 @@
 	"Tile.h"
 	"Room.h"
 
-1428363763 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\game.cpp
+1428543218 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\game.cpp
 	"Game.h"
 	"Room.h"
 	"Tile.h"
@@ -775,7 +777,7 @@
 1428182483 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\disjointset.h
 	<memory>
 
-1428368081 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\player.cpp
+1428544368 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\player.cpp
 	"Player.h"
 	"Action.h"
 	"Controller.h"
@@ -788,12 +790,14 @@
 	<cmath>
 	<cassert>
 
-1428367906 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\player.h
+1428544255 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\player.h
 	<SFML/Graphics.hpp>
 	<memory>
 	<list>
+	<iostream>
 
-1428254957 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\action.h
+1428540810 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\action.h
+	<SFML/System/Vector2.hpp>
 
 1428249178 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\controller.h
 	<memory>
@@ -807,17 +811,20 @@
 1428249190 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\controllerinput.h
 	"Controller.h"
 
-1428254666 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\gamehandler.h
+1428546433 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\gamehandler.h
 	<memory>
 	"Game.h"
 
-1428369169 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\gamehandler.cpp
+1428546559 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\gamehandler.cpp
 	"GameHandler.h"
 	"Player.h"
 	"Room.h"
 	"Tile.h"
+	"TileMonster.h"
 	"Action.h"
 	<iostream>
+	<cassert>
+	<random>
 
 1428337779 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\interpolation.h
 	<SFML/System/Vector2.hpp>
@@ -838,5 +845,12 @@
 	<mutex>
 
 1428367982 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\tiletreasure.h
+	"Tile.h"
+
+1428455057 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\tilemonster.cpp
+	"TileMonster.h"
+	<mutex>
+
+1428454993 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\tilemonster.h
 	"Tile.h"
 

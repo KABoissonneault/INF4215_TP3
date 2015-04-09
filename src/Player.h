@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <list>
+#include <iostream>
 
 namespace INF4215_TP3
 {
@@ -58,15 +59,9 @@ namespace INF4215_TP3
             return m_Position;
         }
 
-        void AddTreasure(unsigned n) noexcept
-        {
-            m_nTreasureCount += n;
-        }
+        void AddTreasure(unsigned n) noexcept;
 
-        void AddWeapon(unsigned n) noexcept
-        {
-            m_nWeaponCount += n;
-        }
+        void AddWeapon(unsigned n) noexcept;
 
         unsigned GetTreasure() const noexcept
         {

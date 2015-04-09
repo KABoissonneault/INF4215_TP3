@@ -76,6 +76,21 @@ namespace INF4215_TP3
         m_Position = pos;
     }
 
+    void Player::AddTreasure(unsigned n) noexcept
+    {
+        m_nTreasureCount += n;
+        std::cout << "Joueur " << static_cast<unsigned>(m_eID) << ": " << m_nTreasureCount << "(+"
+        << n << ") points de tresor" << std::endl;
+    }
+
+    void Player::AddWeapon(unsigned n) noexcept
+    {
+        m_nWeaponCount += n;
+        std::cout << "Joueur " << static_cast<unsigned>(m_eID) << ": " << m_nWeaponCount << "(+"
+        << n << ") points de force" << std::endl;
+    }
+
+
     std::unique_ptr<Action> Player::ChooseAction()
     {
         // If stunned, return idle action
@@ -142,5 +157,8 @@ namespace INF4215_TP3
     void Player::Stun(unsigned nTurnCount) noexcept
     {
         m_nStunTurnCount = std::max(m_nStunTurnCount, nTurnCount);
+
+        std::cout << "Joueur " << static_cast<unsigned>(m_eID) << ": " << "paralyse pour " << nTurnCount
+        << " tours" << std::endl;
     }
 }
