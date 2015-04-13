@@ -34,6 +34,8 @@ namespace INF4215_TP3
     Game::Game()
         : m_aLastFrameKeys(knNumKeys, false),
         m_aFrameKeys(knNumKeys, false),
+        m_aLastFrameLetters(knNumLetters, false),
+        m_aFrameLetters(knNumLetters, false),
         m_numberGenerator(std::chrono::system_clock::now().time_since_epoch().count()),
         m_bInitialized{false},
         m_bPause{false},
@@ -41,7 +43,7 @@ namespace INF4215_TP3
         m_nMapSizeY{5},
         m_nWantedSeed{knDefaultSeed},
         m_nTrailMaxLength{0},
-        m_bBuildDebug{false}
+        m_bDebug{false}
     {
         m_pGameHandler.reset(new GameHandler(*this));
     }
@@ -187,9 +189,9 @@ namespace INF4215_TP3
 
                     ++i;
                 }
-                else if(arg == "build_debug")
+                else if(arg == "debug")
                 {
-                    m_bBuildDebug = true;
+                    m_bDebug = true;
                 }
                 else
                 {
@@ -215,6 +217,10 @@ namespace INF4215_TP3
         for(unsigned i = 0; i < knNumKeys; ++i)
         {
             m_aLastFrameKeys[i] = m_aFrameKeys[i];
+        }
+        for(unsigned i = 0; i < knNumLetters; ++i)
+        {
+            m_aLastFrameLetters[i] = m_aFrameLetters[i];
         }
     }
 
@@ -265,6 +271,7 @@ namespace INF4215_TP3
                     case sf::Keyboard::Key::Numpad2:
                     case sf::Keyboard::Key::Numpad3:
                     case sf::Keyboard::Key::Numpad4:
+                    case sf::Keyboard::Key::Numpad5:
                     case sf::Keyboard::Key::Numpad6:
                     case sf::Keyboard::Key::Numpad7:
                     case sf::Keyboard::Key::Numpad8:
@@ -275,10 +282,15 @@ namespace INF4215_TP3
                         }
                         break;
 
-
                     default:
                         break;
                     }
+                    if(event.key.code >= sf::Keyboard::Key::A && event.key.code <= sf::Keyboard::Key::Z)
+                    {
+                        unsigned index = event.key.code - sf::Keyboard::Key::A;
+                        m_aFrameLetters[index] = true;
+                    }
+
 
                 }
                 break;
@@ -295,6 +307,7 @@ namespace INF4215_TP3
                     case sf::Keyboard::Key::Numpad2:
                     case sf::Keyboard::Key::Numpad3:
                     case sf::Keyboard::Key::Numpad4:
+                    case sf::Keyboard::Key::Numpad5:
                     case sf::Keyboard::Key::Numpad6:
                     case sf::Keyboard::Key::Numpad7:
                     case sf::Keyboard::Key::Numpad8:
@@ -305,9 +318,13 @@ namespace INF4215_TP3
                         }
                         break;
 
-
                     default:
                         break;
+                    }
+                    if(event.key.code >= sf::Keyboard::Key::A && event.key.code <= sf::Keyboard::Key::Z)
+                    {
+                        unsigned index = event.key.code - sf::Keyboard::Key::A;
+                        m_aFrameLetters[index] = false;
                     }
                 }
             default:

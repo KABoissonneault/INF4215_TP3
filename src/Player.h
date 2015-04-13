@@ -38,6 +38,10 @@ namespace INF4215_TP3
         void ExecuteAction(const Action&);
 
         void Stun(unsigned nTurnCount) noexcept;
+        bool IsStunned() const noexcept
+        {
+            return m_nStunTurnCount > 0;
+        }
 
         const sf::Sprite& GetSprite() const noexcept
         {
@@ -60,6 +64,8 @@ namespace INF4215_TP3
         }
 
         void AddTreasure(unsigned n) noexcept;
+        // Returns the amount of treasure that was actually removed from the player
+        unsigned RemoveTreasure(unsigned n) noexcept;
 
         void AddWeapon(unsigned n) noexcept;
 
@@ -73,8 +79,10 @@ namespace INF4215_TP3
             return m_nWeaponCount;
         }
 
-    private:
-        void SetPosition(const sf::Vector2i&);
+        void Move(const sf::Vector2i&);
+        void Teleport(const sf::Vector2i&);
+
+private:
         void AddTrail(const Action&);
 
         std::list<Trail*> m_queueTrails;

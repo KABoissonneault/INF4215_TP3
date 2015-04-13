@@ -70,7 +70,7 @@ namespace INF4215_TP3
                 return nullptr;
             }
 
-            return m_a2pTiles[x][y];
+            return m_a2pTiles[x][y].get();
         }
 
         ITile* GetTile(const sf::Vector2i& pos)
@@ -109,6 +109,7 @@ namespace INF4215_TP3
         }
 
         TileFloor* GetRandomFloorTile();
+        const TileFloor* GetRandomFloorTile() const;
 
     private:
         void GenerateFloorsAndWalls(std::default_random_engine& engine);
@@ -127,7 +128,7 @@ namespace INF4215_TP3
         void MergeIfValid(size_t source, size_t destination, Utility::DisjointSet& groups);
 
         sf::RenderTarget& m_View;
-        std::vector<std::vector<ITile*>> m_a2pTiles;
+        std::vector<std::vector<std::unique_ptr<ITile>>> m_a2pTiles;
 
         sf::Vector2i m_Player1StartPosition;
         sf::Vector2i m_Player2StartPosition;

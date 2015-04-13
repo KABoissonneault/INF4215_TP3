@@ -3,6 +3,7 @@
 #include "Action.h"
 #include "Controller.h"
 #include "ControllerInput.h"
+#include "ControllerInputAlt.h"
 #include "Room.h"
 #include "Tile.h"
 #include "Interpolation.h"
@@ -19,7 +20,7 @@ namespace INF4215_TP3
         m_eID{eID},
         m_nStunTurnCount{0},
         m_nTreasureCount{0},
-        m_nWeaponCount{0}
+        m_nWeaponCount{1}
     {
         // Assert the player was spawned in a valid position
         assert(!m_Room.GetTile(initialPosition)->isSolid());
@@ -34,7 +35,15 @@ namespace INF4215_TP3
         // TODO: Assign controller
         if(eControlType == ControllerType::Input)
         {
-            m_pController.reset( new ControllerInput(*this) );
+            if(eID == ID::Player1)
+            {
+                m_pController.reset( new ControllerInputAlt(*this) );
+            }
+            else
+            {
+                m_pController.reset( new ControllerInput(*this) );
+            }
+
         }
         // TODO: Other controllers
         else
@@ -64,7 +73,7 @@ namespace INF4215_TP3
         view.draw(m_Sprite, context);
     }
 
-    void Player::SetPosition(const sf::Vector2i& pos)
+    void Player::Move(const sf::Vector2i& pos)
     {
         // Start sprite transition to destination
         // Make sure the sprite starts from the current position in case it hasn't reached it yet
@@ -76,11 +85,30 @@ namespace INF4215_TP3
         m_Position = pos;
     }
 
+    void Player::Teleport(const sf::Vector2i& pos)
+    {
+        m_Position = pos;
+
+        m_Sprite.setPosition( m_Room.GetCoordFromTilePos(m_Position.x, m_Position.y) );
+    }
+
     void Player::AddTreasure(unsigned n) noexcept
     {
         m_nTreasureCount += n;
         std::cout << "Joueur " << static_cast<unsigned>(m_eID) << ": " << m_nTreasureCount << "(+"
         << n << ") points de tresor" << std::endl;
+    }
+
+    unsigned Player::RemoveTreasure(unsigned n) noexcept
+    {
+        const auto knOldTreasureCount = m_nTreasureCount;
+        m_nTreasureCount = static_cast<unsigned>(std::max(0, static_cast<int>(m_nTreasureCount) - static_cast<int>(n)));
+        const auto knRemovedTreasure = knOldTreasureCount - m_nTreasureCount;
+
+        std::cout << "Joueur " << static_cast<unsigned>(m_eID) << ": " << m_nTreasureCount << "(-"
+        << knRemovedTreasure << ") points de tresor" << std::endl;
+
+        return knRemovedTreasure;
     }
 
     void Player::AddWeapon(unsigned n) noexcept
@@ -94,10 +122,10 @@ namespace INF4215_TP3
     std::unique_ptr<Action> Player::ChooseAction()
     {
         // If stunned, return idle action
-        if(m_nStunTurnCount > 0)
+        if(IsStunned())
         {
             --m_nStunTurnCount;
-            return std::unique_ptr<Action>(new Action{Action::Direction::Idle});
+            return std::unique_ptr<Action>(new Action{*this, Action::Direction::Idle});
         }
 
         // Otherwise, let the controller decide
@@ -106,26 +134,10 @@ namespace INF4215_TP3
 
     void Player::ExecuteAction(const Action& eAction)
     {
-        sf::Vector2i newPos = m_Position;
-        unsigned direction = static_cast<unsigned>(eAction.ChosenDirection);
+        if(IsStunned())
+            return;
 
-        if(direction & static_cast<unsigned>(Action::Direction::Top))
-        {
-            newPos.y -= 1;
-        }
-        else if(direction & static_cast<unsigned>(Action::Direction::Bottom))
-        {
-            newPos.y += 1;
-        }
-
-        if(direction & static_cast<unsigned>(Action::Direction::Left))
-        {
-            newPos.x -= 1;
-        }
-        else if(direction & static_cast<unsigned>(Action::Direction::Right))
-        {
-            newPos.x += 1;
-        }
+        const sf::Vector2i& newPos = eAction.GetResultingPosition();
 
         const auto pTile = m_Room.GetTile(newPos);
         if( pTile && !(pTile->isSolid()) )
@@ -133,7 +145,7 @@ namespace INF4215_TP3
             // On ajoute une trail
             AddTrail(eAction);
 
-            SetPosition(newPos);
+            Move(newPos);
         }
     }
 

@@ -24,15 +24,12 @@ namespace INF4215_TP3
         // Initialize the room tiles to empty tiles
         for(unsigned i = 0; i < nSizeX; ++i)
         {
-            auto apTiles = std::vector<ITile*>(nSizeY, nullptr);
+            std::vector<std::unique_ptr<ITile>> apTiles(nSizeY);
             m_a2pTiles.emplace_back(std::move(apTiles));
         }
     }
 
-    Room::~Room()
-    {
-        Clean();
-    }
+    Room::~Room() = default;
 
     void Room::Clean() noexcept
     {
@@ -40,15 +37,14 @@ namespace INF4215_TP3
         {
             for(auto& pTile : vecColumn)
             {
-                delete pTile;
-                pTile = nullptr;
+                pTile.reset();
             }
         }
     }
 
     void Room::DebugOutput(const std::string& sOutput)
     {
-        if(Game::Instance().HasBuildDebug())
+        if(Game::Instance().HasDebug())
         {
             std::cout << sOutput << std::endl;
         }
@@ -56,12 +52,10 @@ namespace INF4215_TP3
 
     void Room::Render(sf::RenderTarget& window)
     {
-        for(size_t i = 0; i < GetSizeX(); ++i)
+        for(auto& vecColumn : m_a2pTiles)
         {
-            auto& vecColumn = m_a2pTiles[i];
-            for(size_t j = 0; j < GetSizeY(); ++j)
+            for(auto& pTile : vecColumn)
             {
-                auto pTile = vecColumn[j];
                 if(!pTile)
                 {
                     continue;
@@ -122,11 +116,11 @@ namespace INF4215_TP3
 
                 if(tileChoice < 51)
                 {
-                    pTile = new TileFloor(*this, sf::Vector2i(i, j));
+                    pTile.reset(new TileFloor(*this, sf::Vector2i(i, j)));
                 }
                 else
                 {
-                    pTile = new TileWall(*this, sf::Vector2i(i, j));
+                    pTile.reset(new TileWall(*this, sf::Vector2i(i, j)));
                 }
             }
         }
@@ -147,22 +141,19 @@ namespace INF4215_TP3
             const sf::Vector2i pos = GetRandomFloorTile(engine)->GetPosition();
             auto& pTile = m_a2pTiles[pos.x][pos.y];
 
-            // Free the floor tile
-            delete pTile;
-
             // Roll for the treasure type that's going to be chosen
             const unsigned nTreasureType = distTreasureType(engine);
-            if(nTreasureType < 41)
+            if(nTreasureType < 71)
             {
                 const unsigned nTreasureValue = static_cast<unsigned>(std::max(1.0, std::round(distTreasureValue(engine))));
-                pTile = new TileTreasure(*this, pos, nTreasureValue, 0);
+                pTile.reset(new TileTreasure(*this, pos, nTreasureValue, 0));
 
                 DebugOutput( "\tGenerating treasure with value " + std::to_string(nTreasureValue) );
             }
-            else if(nTreasureType < 81)
+            else if(nTreasureType < 91)
             {
                 const unsigned nWeaponValue = static_cast<unsigned>(std::max(1.0, std::round(distTreasureValue(engine))));
-                pTile = new TileTreasure(*this, pos, 0, nWeaponValue);
+                pTile.reset(new TileTreasure(*this, pos, 0, nWeaponValue));
 
                 DebugOutput( "\tGenerating weaponry with value " + std::to_string(nWeaponValue) );
             }
@@ -170,7 +161,7 @@ namespace INF4215_TP3
             {
                 const unsigned nTreasureValue = static_cast<unsigned>(std::max(1.0, std::round(distTreasureValue(engine))))/2;
                 const unsigned nWeaponValue = static_cast<unsigned>(std::max(1.0, std::round(distTreasureValue(engine))))/2;
-                pTile = new TileTreasure(*this, pos, nTreasureValue, nWeaponValue);
+                pTile.reset(new TileTreasure(*this, pos, nTreasureValue, nWeaponValue));
 
                 DebugOutput( "\tGenerating loot with value {" + std::to_string(nTreasureValue) + ", " + std::to_string(nWeaponValue) + "}" );
             }
@@ -180,7 +171,7 @@ namespace INF4215_TP3
     void Room::GenerateMonsters(std::default_random_engine& engine)
     {
         std::normal_distribution<> distMonsterCount( static_cast<double>(GetTileCount()) / 80.0, static_cast<double>(GetTileCount()) / 160.0 );
-        std::normal_distribution<> distMonsterValue( 4.0, 1.0 );
+        std::normal_distribution<> distMonsterValue( 5.0, 1.0 );
         const unsigned knMonsterCount = static_cast<unsigned>(std::max(1.0, std::round(distMonsterCount(engine))));
 
         DebugOutput( "Generating " + std::to_string(knMonsterCount) + " monsters" );
@@ -193,28 +184,25 @@ namespace INF4215_TP3
                 // Find a random floor tile to replace with a monster tile
                 const sf::Vector2i pos = GetRandomFloorTile(engine)->GetPosition();
                 auto& pPotentialTile = m_a2pTiles[pos.x][pos.y];
-                const auto pOldFloorTile = pPotentialTile; // Cache the old floor tile for restoration in case of failure
+                std::unique_ptr<ITile> pOldFloorTile{pPotentialTile.release()}; // Cache the old floor tile for restoration in case of failure
 
                 // Try replacing the tile with a wall. If the map remains valid,
                 // that means that the current tile does not block any way.
                 // Therefore, it is a valid spot for placing a monster
-                pPotentialTile = new TileFloor(*this, pos);
+                pPotentialTile.reset(new TileFloor(*this, pos));
 
                 const auto bResult = ValidateRoom();
                 if(bResult)
                 {
-                    delete pOldFloorTile;
-                    delete pPotentialTile; // Delete the wall that was there
                     const unsigned knStrength = static_cast<unsigned>(std::max(1.0, std::round(distMonsterValue(engine))));
-                    pPotentialTile = new TileMonster(*this, pos, knStrength);
+                    pPotentialTile.reset(new TileMonster(*this, pos, knStrength));
                     bPlaced = true;
 
                     DebugOutput( "\tGenerating monster with strength " + std::to_string(knStrength) );
                 }
                 else
                 {
-                    delete pPotentialTile;
-                    pPotentialTile = pOldFloorTile;
+                    pPotentialTile.reset(pOldFloorTile.release());
                 }
             }
         }
@@ -264,7 +252,7 @@ namespace INF4215_TP3
         {
             for(size_t j = 0; j < GetSizeY(); ++j)
             {
-                ITile* pITile = m_a2pTiles[i][j];
+                const auto& pITile = m_a2pTiles[i][j];
                 const size_t nCurrentTilePos = i*GetSizeY() + j;
 
                 if(!pITile || pITile->isSolid())
@@ -352,5 +340,10 @@ namespace INF4215_TP3
         }while(GetTile(x, y)->GetTileType() != TileType::Floor);
 
         return static_cast<TileFloor*>(GetTile(x, y));
+    }
+
+    const TileFloor* Room::GetRandomFloorTile() const
+    {
+        return const_cast<Room* const>(this)->GetRandomFloorTile();
     }
 }

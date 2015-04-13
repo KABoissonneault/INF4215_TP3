@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="mingw-w64" />
-				<Option parameters="window_size 1024 768 size 30 22 max_trail 8 seed 881970879 build_debug" />
+				<Option parameters="window_size 1024 768 size 30 22 max_trail 8 debug" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
@@ -51,10 +51,13 @@
 			<Add directory="./lib/SFML-2.2/lib" />
 			<Add directory="./lib/SFML-2.2/bin" />
 		</Linker>
+		<Unit filename="src/Action.cpp" />
 		<Unit filename="src/Action.h" />
 		<Unit filename="src/Controller.h" />
 		<Unit filename="src/ControllerInput.cpp" />
 		<Unit filename="src/ControllerInput.h" />
+		<Unit filename="src/ControllerInputAlt.cpp" />
+		<Unit filename="src/ControllerInputAlt.h" />
 		<Unit filename="src/DisjointSet.h" />
 		<Unit filename="src/Floor_Tile.png" />
 		<Unit filename="src/Game.cpp" />
@@ -81,6 +84,7 @@
 		<Unit filename="src/Trail.cpp" />
 		<Unit filename="src/Trail.h" />
 		<Unit filename="src/Trail1.png" />
+		<Unit filename="src/VectorOperations.h" />
 		<Unit filename="src/Wall_Tile.png" />
 		<Unit filename="src/cb.bmp" />
 		<Unit filename="src/main.cpp" />

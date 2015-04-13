@@ -42,8 +42,13 @@ namespace INF4215_TP3
                     break;
                 }
                 Action::Direction eDir = static_cast<Action::Direction>(nDir);
-                return std::unique_ptr<Action>{ new Action{ eDir } };
+                return std::unique_ptr<Action>{ new Action{ m_Player, eDir } };
             }
+        }
+
+        if(Game::Instance().NumpadWasPressed(5))
+        {
+            return std::unique_ptr<Action>{ new Action{ m_Player, Action::Direction::Idle } };
         }
 
         return nullptr;

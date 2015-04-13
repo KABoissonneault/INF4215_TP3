@@ -34,6 +34,13 @@ namespace INF4215_TP3
             return !m_aLastFrameKeys[key] && m_aFrameKeys[key];
         }
 
+        static const unsigned knNumLetters = 26;
+        bool LetterWasPressed(char letter)
+        {
+            unsigned index = letter - 'a';
+            return !m_aLastFrameLetters[index] && m_aFrameLetters[index];
+        }
+
         std::default_random_engine::result_type GetRandom() const
         {
             return const_cast<Game* const>(this)->m_numberGenerator();
@@ -60,9 +67,9 @@ namespace INF4215_TP3
             return m_nTrailMaxLength;
         }
 
-        bool HasBuildDebug() const
+        bool HasDebug() const
         {
-            return m_bBuildDebug;
+            return m_bDebug;
         }
 
     private:
@@ -93,6 +100,8 @@ namespace INF4215_TP3
 
         std::vector<bool> m_aLastFrameKeys;
         std::vector<bool> m_aFrameKeys;
+        std::vector<bool> m_aLastFrameLetters;
+        std::vector<bool> m_aFrameLetters;
 
         std::default_random_engine m_numberGenerator;
         bool m_bInitialized;
@@ -104,7 +113,7 @@ namespace INF4215_TP3
         unsigned m_nWantedSeed;
         unsigned m_nTrailMaxLength;
         unsigned m_nMSMinimumDelay;
-        bool m_bBuildDebug;
+        bool m_bDebug;
 
         static unsigned s_nWindowX;
         static unsigned s_nWindowY;
