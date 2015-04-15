@@ -28,4 +28,17 @@ namespace INF4215_TP3
 
         return posRet;
     }
+
+    bool Action::operator==(const Action& other) const
+    {
+        return ChosenDirection == other.ChosenDirection && SourcePlayer.GetID() == other.SourcePlayer.GetID();
+    }
+}
+
+namespace std
+{
+    size_t hash<INF4215_TP3::Action>::operator()(const INF4215_TP3::Action& action) const
+    {
+        return (hash<unsigned>()(static_cast<unsigned>(action.ChosenDirection)) ^ (hash<unsigned>()(static_cast<unsigned>(action.SourcePlayer.GetID()) << 1))) >> 1;
+    }
 }

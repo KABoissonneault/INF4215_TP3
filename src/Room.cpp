@@ -177,10 +177,10 @@ namespace INF4215_TP3
     {
         m_nTotalWeaponStrength = 0;
 
-        std::normal_distribution<> distTreasureCount( static_cast<double>(GetTileCount()) / 40.0, static_cast<double>(GetTileCount()) / 80.0);
-        std::normal_distribution<> distTreasureValue( 3.0, 1.0 );
+        std::uniform_int_distribution<unsigned> distTreasureCount( GetTileCount() / 80, GetTileCount() / 40 + GetTileCount() / 80);
+        //std::uniform_int_distribution<unsigned> distTreasureValue( , 1.0 );
         std::uniform_int_distribution<unsigned> distTreasureType(1, 100);
-        const unsigned knTreasureCount = static_cast<unsigned>(std::max(1.0, std::round(distTreasureCount(engine))));
+        const unsigned knTreasureCount = distTreasureCount(engine);
 
         DebugOutput( "Generating " + std::to_string(knTreasureCount) + " treasures" );
 
@@ -223,10 +223,9 @@ namespace INF4215_TP3
 
     void Room::GenerateMonsters(std::default_random_engine& engine)
     {
-        std::normal_distribution<> distMonsterCount( static_cast<double>(GetTileCount()) / 80.0, static_cast<double>(GetTileCount()) / 160.0 );
-        std::uniform_int_distribution<unsigned> distMonsterValue( 3, m_nTotalWeaponStrength/2 );
-        const double kfMonsterCount = distMonsterValue(engine);
-        const unsigned knMonsterCount = static_cast<unsigned>(std::max(1.0, std::round(distMonsterCount(engine))));
+        std::uniform_int_distribution<unsigned> distMonsterCount( GetTileCount() / 160, GetTileCount() / 80 + GetTileCount() / 160);
+        std::uniform_int_distribution<unsigned> distMonsterValue( 1, std::max(3U, m_nTotalWeaponStrength/2) );
+        const unsigned knMonsterCount = distMonsterCount(engine);
 
         DebugOutput( "Generating " + std::to_string(knMonsterCount) + " monsters" );
 

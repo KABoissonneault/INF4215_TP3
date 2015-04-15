@@ -37,6 +37,7 @@ namespace INF4215_TP3
 
         std::unique_ptr<Action> ChooseAction();
         void ExecuteAction(const Action&);
+        void OnTurnEnd();
 
         void Stun(unsigned nTurnCount) noexcept;
         bool IsStunned() const noexcept

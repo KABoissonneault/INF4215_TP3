@@ -20,7 +20,9 @@ namespace INF4215_TP3
 
         virtual std::unique_ptr<Action> ChooseAction() = 0;
 
-        //virtual void OnStun() = 0;
+        virtual void OnStun(unsigned nTurnCount){ (void) nTurnCount; }
+        virtual void OnTreasureChange(int nTreasureChange){ (void) nTreasureChange; }
+        virtual void OnTurnEnd(){}
 
     protected:
         const Player& m_Player;

@@ -2,6 +2,7 @@
 
 #include <SFML/System/Vector2.hpp>
 
+#include <functional>
 
 namespace INF4215_TP3
 {
@@ -24,7 +25,18 @@ namespace INF4215_TP3
 
         sf::Vector2i GetResultingPosition() const;
 
+        bool operator==(const Action&) const;
+
         const Player& SourcePlayer;
         const Direction ChosenDirection;
+    };
+}
+
+namespace std
+{
+    template<>
+    struct hash<INF4215_TP3::Action>
+    {
+        size_t operator()(const INF4215_TP3::Action& action) const;
     };
 }

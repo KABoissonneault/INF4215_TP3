@@ -71,6 +71,9 @@ namespace INF4215_TP3
             ExecuteActions();
         }
 
+        GetPlayer(1).OnTurnEnd();
+        GetPlayer(2).OnTurnEnd();
+
         return GetRoom().IsOver();
     }
 

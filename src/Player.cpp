@@ -102,6 +102,8 @@ namespace INF4215_TP3
         m_nTreasureCount += n;
         std::cout << "Joueur " << static_cast<unsigned>(m_eID) << ": " << m_nTreasureCount << "(+"
         << n << ") points de tresor" << std::endl;
+
+        m_pController->OnTreasureChange(static_cast<int>(n));
     }
 
     unsigned Player::RemoveTreasure(unsigned n) noexcept
@@ -112,6 +114,8 @@ namespace INF4215_TP3
 
         std::cout << "Joueur " << static_cast<unsigned>(m_eID) << ": " << m_nTreasureCount << "(-"
         << knRemovedTreasure << ") points de tresor" << std::endl;
+
+        m_pController->OnTreasureChange(-static_cast<int>(knRemovedTreasure));
 
         return knRemovedTreasure;
     }
@@ -154,6 +158,11 @@ namespace INF4215_TP3
         }
     }
 
+    void Player::OnTurnEnd()
+    {
+        m_pController->OnTurnEnd();
+    }
+
     void Player::AddTrail(const Action& action)
     {
         const unsigned knMaxTrail = Game::Instance().GetMaxTrail();
@@ -187,5 +196,7 @@ namespace INF4215_TP3
 
         std::cout << "Joueur " << static_cast<unsigned>(m_eID) << ": " << "paralyse pour " << nTurnCount
         << " tours" << std::endl;
+
+        m_pController->OnStun(m_nStunTurnCount);
     }
 }

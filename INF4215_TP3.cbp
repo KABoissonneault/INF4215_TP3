@@ -41,6 +41,7 @@
 			<Add option="-Wall" />
 			<Add directory="./lib/SFML-2.2/include" />
 			<Add directory="./src" />
+			<Add directory="./src/ketrud" />
 		</Compiler>
 		<Linker>
 			<Add library="mingw32" />
@@ -87,6 +88,10 @@
 		<Unit filename="src/VectorOperations.h" />
 		<Unit filename="src/Wall_Tile.png" />
 		<Unit filename="src/cb.bmp" />
+		<Unit filename="src/ketrud/ControllerAI.cpp" />
+		<Unit filename="src/ketrud/ControllerAI.h" />
+		<Unit filename="src/ketrud/StateGame.cpp" />
+		<Unit filename="src/ketrud/StateGame.h" />
 		<Unit filename="src/main.cpp" />
 		<Extensions>
 			<code_completion />
