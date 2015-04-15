@@ -22,7 +22,7 @@ namespace INF4215_TP3
 
         void Defeat();
 
-        bool IsEmpty() const noexcept
+        bool isEmpty() const noexcept
         {
             return m_bEmpty;
         }

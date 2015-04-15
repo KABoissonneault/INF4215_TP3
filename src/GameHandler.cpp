@@ -11,13 +11,13 @@
 #include <cassert>
 #include <random>
 #include <cmath>
+#include <thread>
+#include <chrono>
 
 namespace INF4215_TP3
 {
     Game::GameHandler::GameHandler(Game& game)
         : m_Game(game),
-        m_pPlayer1(m_apPlayer[0]),
-        m_pPlayer2(m_apPlayer[1]),
         m_apChosenActions{new std::unique_ptr<Action>[2]},
         m_bInitialized{false}
     {
@@ -49,14 +49,10 @@ namespace INF4215_TP3
             }
         }
 
-        // Player creation
-        m_pPlayer1.reset( new Player(*m_pRoom, Player::ID::Player1, Player::ControllerType::Input, m_pRoom->GetStartPositionPlayer1()) );
-        m_pPlayer2.reset( new Player(*m_pRoom, Player::ID::Player2, Player::ControllerType::Input, m_pRoom->GetStartPositionPlayer2()) );
-
         m_bInitialized = true;
     }
 
-    void Game::GameHandler::Update()
+    bool Game::GameHandler::Update()
     {
         assert(m_bInitialized);
 
@@ -64,7 +60,7 @@ namespace INF4215_TP3
         {
             if(!m_apChosenActions[i])
             {
-                m_apChosenActions[i] = m_apPlayer[i]->ChooseAction();
+                m_apChosenActions[i] = GetPlayer(i+1).ChooseAction();
             }
         }
 
@@ -74,6 +70,13 @@ namespace INF4215_TP3
         {
             ExecuteActions();
         }
+
+        return GetRoom().IsOver();
+    }
+
+    void Game::GameHandler::Restart()
+    {
+        GetRoom().Restart();
     }
 
     void Game::GameHandler::ExecuteActions()
@@ -81,13 +84,14 @@ namespace INF4215_TP3
         CheckPlayerEngagements();
         CheckMonsterEngagements();
 
-        m_pPlayer1->ExecuteAction(*m_apChosenActions[0]);
-        m_pPlayer2->ExecuteAction(*m_apChosenActions[1]);
+        GetPlayer(1).ExecuteAction(GetAction(1));
+        GetPlayer(2).ExecuteAction(GetAction(2));
 
         // Execute the tile's action
-        m_pRoom->GetTile(m_pPlayer1->GetPosition())->OnEnter(*m_pPlayer1);
-        m_pRoom->GetTile(m_pPlayer2->GetPosition())->OnEnter(*m_pPlayer2);
+        GetRoom().GetTile(GetPlayer(1).GetPosition())->OnEnter(GetPlayer(1));
+        GetRoom().GetTile(GetPlayer(2).GetPosition())->OnEnter(GetPlayer(2));
 
+        // Reset actions
         m_apChosenActions[0].reset();
         m_apChosenActions[1].reset();
     }
@@ -201,8 +205,8 @@ namespace INF4215_TP3
         // Check if the players' action brings them on a monster tile
         for (unsigned i = 0; i < knPlayerCount; ++i)
         {
-            auto& player = *m_apPlayer[i];
-            auto& action = *m_apChosenActions[i];
+            auto& player = GetPlayer(i+1);
+            auto& action = GetAction(i+1);
 
             const auto& resultingPos = action.GetResultingPosition();
             const auto pResultingTile = m_pRoom->GetTile(resultingPos);
@@ -212,7 +216,7 @@ namespace INF4215_TP3
             if(pResultingTile->GetTileType() == TileType::Monster)
             {
                 auto& tileMonster = *static_cast<TileMonster*>(pResultingTile);
-                if(tileMonster.IsEmpty())
+                if(tileMonster.isEmpty())
                     continue;
 
                 FightPlayerMonster(player, tileMonster);
@@ -341,19 +345,18 @@ namespace INF4215_TP3
         }
     }
 
+    Player& Game::GameHandler::GetPlayer(size_t nIndex) noexcept
+    {
+        return GetRoom().GetPlayer(nIndex);
+    }
+
     const Player& Game::GameHandler::GetOtherPlayer(const Player& player) const noexcept
     {
-        return *m_apPlayer[knPlayerCount - static_cast<unsigned>(player.GetID())];
+        return GetRoom().GetOtherPlayer(player);
     }
 
     void Game::GameHandler::Render()
     {
-        assert(m_bInitialized);
-
-        m_pRoom->Render(m_Game.m_MainWindow);
-
-        // Draw players
-        m_pPlayer1->Render(m_Game.m_MainWindow, m_pRoom->getTransform());
-        m_pPlayer2->Render(m_Game.m_MainWindow, m_pRoom->getTransform());
+        GetRoom().Render(m_Game.m_MainWindow);
     }
 }

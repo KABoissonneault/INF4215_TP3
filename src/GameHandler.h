@@ -20,17 +20,14 @@ namespace INF4215_TP3
         ~GameHandler();
 
         void Initialize();
-        void Update();
+        bool Update();
         void Render();
+
+        void Restart();
 
         // GameHandler must be initialized first
         // nIndex must be smaller than knPlayerCount
-        Player& GetPlayer(size_t nIndex) noexcept
-        {
-            assert(m_bInitialized && nIndex <= knPlayerCount && nIndex > 0);
-
-            return *m_apPlayer[nIndex - 1];
-        }
+        Player& GetPlayer(size_t nIndex) noexcept;
 
         const Player& GetPlayer(size_t nIndex) const noexcept
         {
@@ -39,6 +36,11 @@ namespace INF4215_TP3
 
         const Player& GetOtherPlayer(const Player& player) const noexcept;
 
+        Room& GetRoom() noexcept
+        {
+            return *m_pRoom;
+        }
+
         const Room& GetRoom() const noexcept
         {
             return *m_pRoom;
@@ -46,8 +48,6 @@ namespace INF4215_TP3
 
 
     private:
-
-
         Action& GetAction(size_t nIndex)
         {
             assert(nIndex <= knPlayerCount && nIndex > 0 && m_bInitialized);
@@ -62,16 +62,14 @@ namespace INF4215_TP3
         void MakePlayersFight();
         void FightPlayerMonster(Player&, TileMonster&);
         int Fight(unsigned force1, unsigned force2);
-        // Returns the treasure that was removed from the player
+
         void CancelAction(size_t nIndex);
+        // Returns the treasure that was removed from the player
         unsigned Kill(Player&, unsigned strength);
         sf::Vector2i FindSafestSpawn(const Player& enemyPlayer);
 
         Game& m_Game;
         std::unique_ptr<Room> m_pRoom;
-        std::unique_ptr<Player> m_apPlayer[2];
-        std::unique_ptr<Player>& m_pPlayer1;
-        std::unique_ptr<Player>& m_pPlayer2;
         std::unique_ptr<std::unique_ptr<Action>[]> m_apChosenActions;
 
         bool m_bInitialized;

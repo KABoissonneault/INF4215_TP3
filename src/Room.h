@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <memory>
+#include <cassert>
 
 namespace INF4215_TP3
 {
@@ -19,6 +20,8 @@ namespace INF4215_TP3
     class Room : public sf::Transformable
     {
     public:
+        static constexpr size_t knPlayerCount = 2;
+
         Room(sf::RenderTarget& view, unsigned nSizeX = 5, unsigned nSizeY = 5);
         ~Room();
 
@@ -26,6 +29,9 @@ namespace INF4215_TP3
 
         void Clean() noexcept;
         void Render(sf::RenderTarget&);
+
+        bool IsOver() const;
+        void Restart();
 
         size_t GetSizeX() const noexcept
         {
@@ -108,6 +114,20 @@ namespace INF4215_TP3
             return m_Player2StartPosition;
         }
 
+        Player& GetPlayer(size_t nIndex) noexcept
+        {
+            assert(nIndex <= knPlayerCount && nIndex > 0);
+
+            return *m_apPlayers[nIndex - 1];
+        }
+
+        const Player& GetPlayer(size_t nIndex) const noexcept
+        {
+            return const_cast<Room* const>(this)->GetPlayer(nIndex);
+        }
+
+        const Player& GetOtherPlayer(const Player& player) const noexcept;
+
         TileFloor* GetRandomFloorTile();
         const TileFloor* GetRandomFloorTile() const;
 
@@ -128,9 +148,13 @@ namespace INF4215_TP3
         void MergeIfValid(size_t source, size_t destination, Utility::DisjointSet& groups);
 
         sf::RenderTarget& m_View;
-        std::vector<std::vector<std::unique_ptr<ITile>>> m_a2pTiles;
+        std::vector<std::vector<std::shared_ptr<ITile>>> m_a2pTiles;
+        std::unique_ptr<Player> m_apPlayers[knPlayerCount];
 
         sf::Vector2i m_Player1StartPosition;
         sf::Vector2i m_Player2StartPosition;
+
+        size_t m_nCurrentSeed;
+        unsigned m_nTotalWeaponStrength;
     };
 }

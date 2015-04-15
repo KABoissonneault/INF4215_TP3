@@ -33,6 +33,7 @@ namespace INF4215_TP3
         ~Player();
 
         void Render(sf::RenderTarget&, const sf::Transform&);
+        void Restart();
 
         std::unique_ptr<Action> ChooseAction();
         void ExecuteAction(const Action&);
@@ -84,6 +85,7 @@ namespace INF4215_TP3
 
 private:
         void AddTrail(const Action&);
+        void CleanTrails();
 
         std::list<Trail*> m_queueTrails;
         const Room& m_Room;

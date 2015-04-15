@@ -14,7 +14,7 @@ namespace  INF4215_TP3
 
     TileMonster::TileMonster(const Room& room, const sf::Vector2i& pos, unsigned strength)
         : ITile(GetTexture(), room, pos, TileType::Monster),
-        m_nTreasureValue(2*strength),
+        m_nTreasureValue(strength),
         m_nWeaponValue(strength)
     {
 

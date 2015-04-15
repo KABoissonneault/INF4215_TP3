@@ -15,6 +15,11 @@ namespace INF4215_TP3
             return false;
         }
 
+        bool isEmpty() const noexcept
+        {
+            return m_bEmpty;
+        }
+
         virtual void OnEnter(Player&) override;
 
         unsigned GetTreasureValue() const noexcept

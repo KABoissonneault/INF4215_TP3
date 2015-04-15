@@ -91,6 +91,7 @@ namespace INF4215_TP3
         sf::Font m_MainFont;
         sf::Text m_PauseText;
         sf::Text m_LoadingText;
+        sf::Text m_VictoryText;
 
         //std::chrono::high_resolution_clock::time_point m_timeNextUpdateMinimum;
 
@@ -106,6 +107,7 @@ namespace INF4215_TP3
         std::default_random_engine m_numberGenerator;
         bool m_bInitialized;
         bool m_bPause;
+        bool m_bWon;
 
         // Args results
         unsigned m_nMapSizeX;

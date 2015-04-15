@@ -22,9 +22,6 @@ namespace INF4215_TP3
         m_nTreasureCount{0},
         m_nWeaponCount{1}
     {
-        // Assert the player was spawned in a valid position
-        assert(!m_Room.GetTile(initialPosition)->isSolid());
-
         m_Texture.loadFromFile(eID == ID::Player1 ? "src/Player1.png" : "src/Player2.png");
         m_Sprite.setTexture(m_Texture);
 
@@ -54,10 +51,7 @@ namespace INF4215_TP3
 
     Player::~Player()
     {
-        for(auto pTrail : m_queueTrails)
-        {
-            delete pTrail;
-        }
+        CleanTrails();
     }
 
     void Player::Render(sf::RenderTarget& view, const sf::Transform& context)
@@ -71,6 +65,15 @@ namespace INF4215_TP3
         m_Sprite.setPosition(Utility::WeightedAverageInterpolate(m_Sprite.getPosition(), m_Room.GetCoordFromTilePos(m_Position.x, m_Position.y), 4));
 
         view.draw(m_Sprite, context);
+    }
+
+    void Player::Restart()
+    {
+        m_nStunTurnCount = 0;
+        m_nTreasureCount = 0;
+        m_nWeaponCount = 1;
+
+        CleanTrails();
     }
 
     void Player::Move(const sf::Vector2i& pos)
@@ -90,6 +93,8 @@ namespace INF4215_TP3
         m_Position = pos;
 
         m_Sprite.setPosition( m_Room.GetCoordFromTilePos(m_Position.x, m_Position.y) );
+
+        CleanTrails();
     }
 
     void Player::AddTreasure(unsigned n) noexcept
@@ -164,6 +169,16 @@ namespace INF4215_TP3
             delete m_queueTrails.front();
             m_queueTrails.pop_front();
         }
+    }
+
+    void Player::CleanTrails()
+    {
+        for(auto trail : m_queueTrails)
+        {
+            delete trail;
+        }
+
+        m_queueTrails.clear();
     }
 
     void Player::Stun(unsigned nTurnCount) noexcept

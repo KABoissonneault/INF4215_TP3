@@ -82,9 +82,18 @@ namespace INF4215_TP3
             }
 
             {
-                m_PauseText.setString("Paused");
+                m_PauseText.setString("Pause");
                 m_PauseText.setFont(m_MainFont);
                 m_PauseText.setColor(sf::Color::Red);
+                const auto& textRect = m_PauseText.getLocalBounds();
+                m_PauseText.setOrigin(textRect.left + textRect.width/2.0f, textRect.top + textRect.height/2.0f);
+                m_PauseText.setPosition(m_MainWindow.mapPixelToCoords(sf::Vector2i(knWindowX/2, knWindowY/2)));
+            }
+
+            {
+                m_VictoryText.setString("Appuyez sur Espace pour recommencer");
+                m_VictoryText.setFont(m_MainFont);
+                m_VictoryText.setColor(sf::Color::Red);
                 const auto& textRect = m_PauseText.getLocalBounds();
                 m_PauseText.setOrigin(textRect.left + textRect.width/2.0f, textRect.top + textRect.height/2.0f);
                 m_PauseText.setPosition(m_MainWindow.mapPixelToCoords(sf::Vector2i(knWindowX/2, knWindowY/2)));
@@ -235,14 +244,13 @@ namespace INF4215_TP3
         while(m_MainWindow.isOpen())
         {
             PollEvents();
-            if(!m_bPause /*&& std::chrono::high_resolution_clock::now() >= m_timeNextUpdateMinimum*/)
+            if(!m_bPause && !m_bWon/*&& std::chrono::high_resolution_clock::now() >= m_timeNextUpdateMinimum*/)
             {
                 Update();
                 //m_timeNextUpdateMinimum = std::chrono::steady_clock::now() + std::chrono::milliseconds(50);
             }
 
             Render();
-
         }
     }
 
@@ -300,7 +308,13 @@ namespace INF4215_TP3
                     switch(event.key.code)
                     {
                     case sf::Keyboard::Key::Space:
-                        m_bPause = !m_bPause;
+                        if(m_bWon)
+                        {
+                            m_bWon = false;
+                            m_pGameHandler->Restart();
+                        }
+                        else
+                            m_bPause = !m_bPause;
                         break;
 
                     case sf::Keyboard::Key::Numpad1:
@@ -335,7 +349,12 @@ namespace INF4215_TP3
 
     void Game::Update()
     {
-        m_pGameHandler->Update();
+        const auto bResult = m_pGameHandler->Update();
+
+        if(bResult)
+        {
+            m_bWon = true;
+        }
     }
 
     void Game::Render()
@@ -347,6 +366,10 @@ namespace INF4215_TP3
         if(m_bPause)
         {
             m_MainWindow.draw(m_PauseText);
+        }
+        else if(m_bWon)
+        {
+            m_MainWindow.draw(m_VictoryText);
         }
 
         m_MainWindow.display();
