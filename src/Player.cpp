@@ -10,6 +10,8 @@
 #include "Trail.h"
 #include "Game.h"
 
+#include "ketrud/ControllerAI.h"
+
 #include <cmath>
 #include <cassert>
 
@@ -41,6 +43,10 @@ namespace INF4215_TP3
                 m_pController.reset( new ControllerInput(*this) );
             }
 
+        }
+        else if(eControlType == ControllerType::AI_Type1)
+        {
+            m_pController.reset( new Ketrud::ControllerAI(*this) );
         }
         // TODO: Other controllers
         else

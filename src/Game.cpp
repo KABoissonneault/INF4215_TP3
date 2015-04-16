@@ -240,6 +240,7 @@ namespace INF4215_TP3
         std::cout << "Debut de la partie!" << std::endl;
 
         //m_timeNextUpdateMinimum = std::chrono::high_resolution_clock::now();
+        Render();
 
         while(m_MainWindow.isOpen())
         {

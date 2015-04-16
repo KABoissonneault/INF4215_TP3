@@ -1,14 +1,17 @@
 #pragma once
 
+#include "Tile.h"
+
 #include <SFML/Graphics.hpp>
 
+
+#include <set>
 #include <vector>
 #include <memory>
 #include <cassert>
 
 namespace INF4215_TP3
 {
-    class ITile;
     class TileFloor;
     class Player;
 
@@ -137,15 +140,15 @@ namespace INF4215_TP3
         void GenerateMonsters(std::default_random_engine& engine);
         void GeneratePlayerSpawns(std::default_random_engine& engine);
 
-        bool ValidateRoom();
+        bool ValidateRoom(std::set<TileType> invalidTypes = {});
 
         void DebugOutput(const std::string&);
 
         // For seed consistency
         TileFloor* GetRandomFloorTile(std::default_random_engine& engine);
 
-        void GroupTile(size_t x, size_t y, Utility::DisjointSet& groups);
-        void MergeIfValid(size_t source, size_t destination, Utility::DisjointSet& groups);
+        void GroupTile(size_t x, size_t y, Utility::DisjointSet& groups, const std::set<TileType>& invalidTypes);
+        void MergeIfValid(size_t source, size_t destination, Utility::DisjointSet& groups, const std::set<TileType>& invalidTypes);
 
         sf::RenderTarget& m_View;
         std::vector<std::vector<std::shared_ptr<ITile>>> m_a2pTiles;

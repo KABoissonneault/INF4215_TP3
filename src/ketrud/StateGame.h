@@ -51,6 +51,7 @@ namespace std
     template<>
     struct hash<INF4215_TP3::Ketrud::StateGame>
     {
-        size_t operator()(const INF4215_TP3::Ketrud::StateGame&) const;
+        size_t operator()(const INF4215_TP3::Ketrud::StateGame&) const noexcept;
     };
 }
+

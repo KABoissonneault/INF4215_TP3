@@ -18,6 +18,11 @@ namespace INF4215_TP3
 
         virtual ~IController() = default;
 
+        const Player& GetPlayer() const
+        {
+            return m_Player;
+        }
+
         virtual std::unique_ptr<Action> ChooseAction() = 0;
 
         virtual void OnStun(unsigned nTurnCount){ (void) nTurnCount; }

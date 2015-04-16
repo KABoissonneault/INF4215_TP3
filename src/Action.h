@@ -2,6 +2,7 @@
 
 #include <SFML/System/Vector2.hpp>
 
+#include <vector>
 #include <functional>
 
 namespace INF4215_TP3
@@ -23,13 +24,22 @@ namespace INF4215_TP3
             BottomRight = Bottom|Right
         };
 
+        static const std::vector<Direction>& GetDirections();
+
         sf::Vector2i GetResultingPosition() const;
 
         bool operator==(const Action&) const;
 
+
+
         const Player& SourcePlayer;
         const Direction ChosenDirection;
+
+    private:
+        static std::vector<Direction> s_vecDirections;
     };
+
+    sf::Vector2i operator+(const sf::Vector2i& pos, const Action::Direction& action);
 }
 
 namespace std
@@ -37,6 +47,7 @@ namespace std
     template<>
     struct hash<INF4215_TP3::Action>
     {
-        size_t operator()(const INF4215_TP3::Action& action) const;
+        size_t operator()(const INF4215_TP3::Action& action) const noexcept;
     };
 }
+

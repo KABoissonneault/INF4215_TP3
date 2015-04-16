@@ -115,7 +115,7 @@ namespace INF4215_TP3
 
 namespace std
 {
-    size_t hash<INF4215_TP3::Ketrud::StateGame>::operator()(const INF4215_TP3::Ketrud::StateGame& state) const
+    size_t hash<INF4215_TP3::Ketrud::StateGame>::operator()(const INF4215_TP3::Ketrud::StateGame& state) const noexcept
     {
         size_t nRetHash = 0;
         for(size_t i = 0; i < state.GetTiles().size(); ++i)
