@@ -194,9 +194,29 @@ namespace INF4215_TP3
                         throw std::runtime_error("Le premier argument suivant \"delay\" n'etait pas un nombre");
                     }
 
-                    std::cout << "Le delais minimal entre 2 tours sera " << m_nMSMinimumDelay << std::endl;
+                    std::cout << "Le delais minimal entre 2 tours sera " << m_nMSMinimumDelay << " millisecondes" << std::endl;
 
                     ++i;
+                }
+                else if(arg == "sim")
+                {
+                    const std::string& sSimCount = args.at(i+1);
+
+                    auto nResult = sscanf( sSimCount.c_str(), "%u", &m_nSimCount);
+                    if(nResult != 1)
+                    {
+                        throw std::runtime_error("Le premier argument suivant \"sim\" n'etait pas un nombre");
+                    }
+
+                    std::cout << "Le nombre de tours simulés sera " << m_nSimCount << std::endl;
+
+                    ++i;
+
+                    m_bPause = false;
+                }
+                else if(arg == "input")
+                {
+                    m_bInput = true;
                 }
                 else if(arg == "debug")
                 {
@@ -239,16 +259,28 @@ namespace INF4215_TP3
 
         std::cout << "Debut de la partie!" << std::endl;
 
-        //m_timeNextUpdateMinimum = std::chrono::high_resolution_clock::now();
+        m_timeNextUpdateMinimum = std::chrono::steady_clock::now();
         Render();
 
         while(m_MainWindow.isOpen())
         {
-            PollEvents();
-            if(!m_bPause && !m_bWon/*&& std::chrono::high_resolution_clock::now() >= m_timeNextUpdateMinimum*/)
+            // On ne prend que les inputs en mode non-simulation
+            if(!m_nSimCount)
+            {
+                PollEvents();
+            }
+
+            // On restart la game automatiquement si on est en mode simulation
+            if(m_nSimCount && m_bWon)
+            {
+                m_bWon = false;
+                m_pGameHandler->Restart();
+            }
+
+            if(m_nSimCount || (!m_bPause && !m_bWon && std::chrono::steady_clock::now() >= m_timeNextUpdateMinimum))
             {
                 Update();
-                //m_timeNextUpdateMinimum = std::chrono::steady_clock::now() + std::chrono::milliseconds(50);
+                m_timeNextUpdateMinimum = std::chrono::steady_clock::now() + std::chrono::milliseconds(m_nMSMinimumDelay);
             }
 
             Render();
@@ -274,6 +306,14 @@ namespace INF4215_TP3
                     {
                     case sf::Keyboard::Key::Escape:
                         m_MainWindow.close();
+                        break;
+
+                    case sf::Keyboard::Key::Up:
+                        m_nMSMinimumDelay += (m_nMSMinimumDelay/4);
+                        break;
+
+                    case sf::Keyboard::Key::Down:
+                        if(m_nMSMinimumDelay > 0) m_nMSMinimumDelay -= (m_nMSMinimumDelay/4);
                         break;
 
                     case sf::Keyboard::Key::Numpad1:
@@ -354,6 +394,11 @@ namespace INF4215_TP3
 
         if(bResult)
         {
+            // Une partie de moins à simuler
+            if(m_nSimCount)
+            {
+                --m_nSimCount;
+            }
             m_bWon = true;
         }
     }

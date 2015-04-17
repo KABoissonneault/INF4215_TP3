@@ -1,0 +1,1 @@
+call "INF4215_TP3.exe" window_size 1024 768 size 30 22 max_trail 8 delay 50 sim 10

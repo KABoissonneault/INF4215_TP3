@@ -116,7 +116,6 @@ namespace INF4215_TP3
 
             while(frontier.size() != 0)
             {
-
                 auto nodeInfo = frontier.top();
                 frontier.pop();
 
@@ -185,8 +184,8 @@ namespace INF4215_TP3
             if(pTile->GetTileType() == TileType::Treasure)
             {
                 auto pTreasure = static_cast<const TileTreasure*>(pTile);
-                nHeuristic -= pTreasure->GetTreasureValue()*16;
-                nHeuristic -= pTreasure->GetWeaponValue()*16;
+                nHeuristic -= pTreasure->GetTreasureValue()*2;
+                nHeuristic -= pTreasure->GetWeaponValue()*2;
             }
             else if(pTile->GetTileType() == TileType::Monster)
             {

@@ -6,7 +6,7 @@
 #include <exception>
 #include <memory>
 #include <random>
-//#include <chrono>
+#include <chrono>
 
 namespace INF4215_TP3
 {
@@ -72,6 +72,11 @@ namespace INF4215_TP3
             return m_bDebug;
         }
 
+        bool IsInput() const
+        {
+            return m_bInput;
+        }
+
     private:
         class GameHandler;
 
@@ -93,7 +98,7 @@ namespace INF4215_TP3
         sf::Text m_LoadingText;
         sf::Text m_VictoryText;
 
-        //std::chrono::high_resolution_clock::time_point m_timeNextUpdateMinimum;
+        std::chrono::steady_clock::time_point m_timeNextUpdateMinimum;
 
         // Takes care of the game flow
         // Unlike Game itself which handle the "app" flow
@@ -115,7 +120,9 @@ namespace INF4215_TP3
         unsigned m_nWantedSeed;
         unsigned m_nTrailMaxLength;
         unsigned m_nMSMinimumDelay;
+        unsigned m_nSimCount{};
         bool m_bDebug;
+        bool m_bInput{false};
 
         static unsigned s_nWindowX;
         static unsigned s_nWindowY;

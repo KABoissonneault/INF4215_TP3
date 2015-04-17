@@ -361,12 +361,13 @@
 	<exception>
 	<vector>
 
-1429057921 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\game.h
+1429306144 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\game.h
 	<SFML/Graphics.hpp>
 	<vector>
 	<exception>
 	<memory>
 	<random>
+	<chrono>
 
 1417741758 d:\my folder\ecole\universite\inf4215\inf4215_tp3\lib\sfml-2.2\include\sfml\graphics.hpp
 	<SFML/Window.hpp>
@@ -721,7 +722,7 @@
 	<string>
 	<vector>
 
-1429231264 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\room.cpp
+1429307487 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\room.cpp
 	"Room.h"
 	"Tile.h"
 	"TileFloor.h"
@@ -754,7 +755,7 @@
 	"Tile.h"
 	"Room.h"
 
-1429231615 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\game.cpp
+1429306758 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\game.cpp
 	"Game.h"
 	"Room.h"
 	"Tile.h"
@@ -919,7 +920,7 @@
 	"TileMonster.h"
 	<SFML/System/Vector2.hpp>
 
-1429228096 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\astar.cpp
+1429307588 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\astar.cpp
 	"ketrud/AStar.h"
 	<queue>
 	"Room.h"

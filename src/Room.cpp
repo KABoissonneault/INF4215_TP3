@@ -30,8 +30,17 @@ namespace INF4215_TP3
             m_a2pTiles.emplace_back(std::move(apTiles));
         }
 
-        m_apPlayers[0].reset(new Player(*this, Player::ID::Player1, Player::ControllerType::AI_Type1, {0,0}));
-        m_apPlayers[1].reset(new Player(*this, Player::ID::Player2, Player::ControllerType::AI_Type2, {0,0}));
+        if(Game::Instance().IsInput())
+        {
+            m_apPlayers[0].reset(new Player(*this, Player::ID::Player1, Player::ControllerType::Input, {0,0}));
+            m_apPlayers[1].reset(new Player(*this, Player::ID::Player2, Player::ControllerType::Input, {0,0}));
+        }
+        else
+        {
+            m_apPlayers[0].reset(new Player(*this, Player::ID::Player1, Player::ControllerType::AI_Type1, {0,0}));
+            m_apPlayers[1].reset(new Player(*this, Player::ID::Player2, Player::ControllerType::AI_Type1, {0,0}));
+        }
+
     }
 
     Room::~Room() = default;
@@ -224,7 +233,7 @@ namespace INF4215_TP3
     void Room::GenerateMonsters(std::default_random_engine& engine)
     {
         std::uniform_int_distribution<unsigned> distMonsterCount( GetTileCount() / 160, GetTileCount() / 80 + GetTileCount() / 160);
-        std::uniform_int_distribution<unsigned> distMonsterValue( 1, std::max(3U, m_nTotalWeaponStrength/2) );
+        std::uniform_int_distribution<unsigned> distMonsterValue( 1, std::max(3U, m_nTotalWeaponStrength/2 - 1) );
         const unsigned knMonsterCount = distMonsterCount(engine);
 
         DebugOutput( "Generating " + std::to_string(knMonsterCount) + " monsters" );
