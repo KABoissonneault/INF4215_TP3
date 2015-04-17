@@ -19,6 +19,8 @@ namespace INF4215_TP3
     protected:
         ITile(const Room& room, const sf::Vector2i& position, TileType eType);
         ITile(const sf::Texture& texture, const Room& room, const sf::Vector2i& position, TileType eType);
+        ITile(const ITile&) = default;
+        ITile& operator=(const ITile&) = default;
 
         void SetTexture(const sf::Texture& texture)
         {
@@ -27,6 +29,8 @@ namespace INF4215_TP3
 
     public:
         virtual ~ITile() = default;
+
+
         virtual bool isSolid() const noexcept = 0;
         bool isTreasure() const noexcept
         {

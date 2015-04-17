@@ -5,7 +5,6 @@
 #include <vector>
 #include <functional>
 
-
 namespace INF4215_TP3
 {
     class Player;
@@ -29,15 +28,17 @@ namespace INF4215_TP3
 
         sf::Vector2i GetResultingPosition() const;
 
-        const Player& SourcePlayer;
-        Direction ChosenDirection;
+        bool operator==(const Action&) const;
 
-        bool operator==(const Action& rhs) const;
+
+
+        const Player& SourcePlayer;
+        const Direction ChosenDirection;
 
     private:
         static std::vector<Direction> s_vecDirections;
-
     };
+
     sf::Vector2i operator+(const sf::Vector2i& pos, const Action::Direction& action);
 }
 
@@ -49,3 +50,4 @@ namespace std
         size_t operator()(const INF4215_TP3::Action& action) const noexcept;
     };
 }
+

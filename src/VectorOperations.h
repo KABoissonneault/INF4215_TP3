@@ -23,4 +23,14 @@ namespace sf
     {
         return vec/Norm(vec);
     }
+
+    template<class T>
+    bool operator<(const sf::Vector2<T>& first, const sf::Vector2<T>& second)
+    {
+        return first.x < second.x ?
+            true
+            : first.x == second.x ?
+                first.y < second.y
+                : false;
+    }
 }

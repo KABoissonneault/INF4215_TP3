@@ -30,17 +30,7 @@ namespace INF4215_TP3
         return s_vecDirections;
     }
 
-    sf::Vector2i Action::GetResultingPosition() const
-    {
-        return SourcePlayer.GetPosition() + ChosenDirection;
-    }
-
-    bool Action::operator==(const Action& rhs) const
-    {
-        return this->ChosenDirection == rhs.ChosenDirection && SourcePlayer.GetID() == rhs.SourcePlayer.GetID();
-    }
-
-        sf::Vector2i operator+(const sf::Vector2i& pos, const Action::Direction& eDir)
+    sf::Vector2i operator+(const sf::Vector2i& pos, const Action::Direction& eDir)
     {
         sf::Vector2i posRet = pos;
         const unsigned dir = static_cast<unsigned>(eDir);
@@ -63,6 +53,16 @@ namespace INF4215_TP3
         }
 
         return posRet;
+    }
+
+    sf::Vector2i Action::GetResultingPosition() const
+    {
+        return SourcePlayer.GetPosition() + ChosenDirection;
+    }
+
+    bool Action::operator==(const Action& other) const
+    {
+        return ChosenDirection == other.ChosenDirection && SourcePlayer.GetID() == other.SourcePlayer.GetID();
     }
 }
 

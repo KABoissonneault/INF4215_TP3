@@ -30,8 +30,8 @@ namespace INF4215_TP3
             m_a2pTiles.emplace_back(std::move(apTiles));
         }
 
-        m_apPlayers[0].reset(new Player(*this, Player::ID::Player1, Player::ControllerType::Input, {0,0}));
-        m_apPlayers[1].reset(new Player(*this, Player::ID::Player2, Player::ControllerType::Input, {0,0}));
+        m_apPlayers[0].reset(new Player(*this, Player::ID::Player1, Player::ControllerType::AI_Type1, {0,0}));
+        m_apPlayers[1].reset(new Player(*this, Player::ID::Player2, Player::ControllerType::AI_Type2, {0,0}));
     }
 
     Room::~Room() = default;
@@ -177,10 +177,10 @@ namespace INF4215_TP3
     {
         m_nTotalWeaponStrength = 0;
 
-        std::normal_distribution<> distTreasureCount( static_cast<double>(GetTileCount()) / 40.0, static_cast<double>(GetTileCount()) / 80.0);
-        std::normal_distribution<> distTreasureValue( 3.0, 1.0 );
+        std::uniform_int_distribution<unsigned> distTreasureCount( GetTileCount() / 80, GetTileCount() / 40 + GetTileCount() / 80);
+        //std::uniform_int_distribution<unsigned> distTreasureValue( , 1.0 );
         std::uniform_int_distribution<unsigned> distTreasureType(1, 100);
-        const unsigned knTreasureCount = static_cast<unsigned>(std::max(1.0, std::round(distTreasureCount(engine))));
+        const unsigned knTreasureCount = distTreasureCount(engine);
 
         DebugOutput( "Generating " + std::to_string(knTreasureCount) + " treasures" );
 
@@ -223,10 +223,9 @@ namespace INF4215_TP3
 
     void Room::GenerateMonsters(std::default_random_engine& engine)
     {
-        std::normal_distribution<> distMonsterCount( static_cast<double>(GetTileCount()) / 80.0, static_cast<double>(GetTileCount()) / 160.0 );
-        std::uniform_int_distribution<unsigned> distMonsterValue( 3, m_nTotalWeaponStrength/2 );
-        const double kfMonsterCount = distMonsterValue(engine);
-        const unsigned knMonsterCount = static_cast<unsigned>(std::max(1.0, std::round(distMonsterCount(engine))));
+        std::uniform_int_distribution<unsigned> distMonsterCount( GetTileCount() / 160, GetTileCount() / 80 + GetTileCount() / 160);
+        std::uniform_int_distribution<unsigned> distMonsterValue( 1, std::max(3U, m_nTotalWeaponStrength/2) );
+        const unsigned knMonsterCount = distMonsterCount(engine);
 
         DebugOutput( "Generating " + std::to_string(knMonsterCount) + " monsters" );
 
@@ -243,13 +242,12 @@ namespace INF4215_TP3
                 // Try replacing the tile with a wall. If the map remains valid,
                 // that means that the current tile does not block any way.
                 // Therefore, it is a valid spot for placing a monster
-                pPotentialTile = std::make_shared<TileFloor>(*this, pos);
+                const unsigned knStrength = distMonsterValue(engine);
+                pPotentialTile = std::make_shared<TileMonster>(*this, pos, knStrength);
 
-                const auto bResult = ValidateRoom();
+                const auto bResult = ValidateRoom({TileType::Monster});
                 if(bResult)
                 {
-                    const unsigned knStrength = distMonsterValue(engine);
-                    pPotentialTile.reset(new TileMonster(*this, pos, knStrength));
                     bPlaced = true;
 
                     DebugOutput( "\tGenerating monster with strength " + std::to_string(knStrength) );
@@ -295,12 +293,14 @@ namespace INF4215_TP3
 
     }
 
-    bool Room::ValidateRoom()
+    bool Room::ValidateRoom(std::set<TileType> invalidTypes)
     {
+        invalidTypes.insert(TileType::Wall);
+
         const auto nNumElements = GetSizeX() * GetSizeY();
         Utility::DisjointSet anGroup(nNumElements);
         // This set is used for invalid tiles. All invalid tiles should belong to that set
-        size_t nWallSet = 0xFFFFFFFF;
+        size_t nInvalidSet = 0xFFFFFFFF;
 
         for(size_t i = 0; i < GetSizeX(); ++i)
         {
@@ -309,17 +309,17 @@ namespace INF4215_TP3
                 const auto& pITile = m_a2pTiles[i][j];
                 const size_t nCurrentTilePos = i*GetSizeY() + j;
 
-                if(!pITile || pITile->isSolid())
+                if(!pITile || invalidTypes.find(pITile->GetTileType()) != end(invalidTypes))
                 {
                     // If this is the first invalid tile, make it the root of the set
                     // Otherwise, merge it to the invalid set
-                    if(nWallSet == 0xFFFFFFFF)
+                    if(nInvalidSet == 0xFFFFFFFF)
                     {
-                        nWallSet = nCurrentTilePos;
+                        nInvalidSet = nCurrentTilePos;
                     }
                     else
                     {
-                        anGroup.merge(nWallSet, nCurrentTilePos);
+                        anGroup.merge(nInvalidSet, nCurrentTilePos);
                     }
 
                     continue;
@@ -327,7 +327,7 @@ namespace INF4215_TP3
                 // If this is a non-solid tile, merge it with adjacent non-solid tiles
                 else
                 {
-                    GroupTile(i, j, anGroup);
+                    GroupTile(i, j, anGroup, invalidTypes);
                 }
             }
         }
@@ -337,32 +337,32 @@ namespace INF4215_TP3
         return anGroup.count() == 2;
     }
 
-    void Room::GroupTile(size_t x, size_t y, Utility::DisjointSet& groups)
+    void Room::GroupTile(size_t x, size_t y, Utility::DisjointSet& groups, const std::set<TileType>& invalidSet)
     {
         const auto nCurrentPos = x*GetSizeY() + y;
 
         if(x != 0)
         {
-            if(y != 0) MergeIfValid(nCurrentPos, nCurrentPos - GetSizeY() - 1, groups);
-            MergeIfValid(nCurrentPos, nCurrentPos - GetSizeY(), groups);
-            if(y != GetSizeY() - 1) MergeIfValid(nCurrentPos, nCurrentPos - GetSizeY() + 1, groups);
+            if(y != 0) MergeIfValid(nCurrentPos, nCurrentPos - GetSizeY() - 1, groups, invalidSet);
+            MergeIfValid(nCurrentPos, nCurrentPos - GetSizeY(), groups, invalidSet);
+            if(y != GetSizeY() - 1) MergeIfValid(nCurrentPos, nCurrentPos - GetSizeY() + 1, groups, invalidSet);
         }
 
-        if(y != 0) MergeIfValid(nCurrentPos, nCurrentPos - 1, groups);
-        if(y != GetSizeY() - 1) MergeIfValid(nCurrentPos, nCurrentPos + 1, groups);
+        if(y != 0) MergeIfValid(nCurrentPos, nCurrentPos - 1, groups, invalidSet);
+        if(y != GetSizeY() - 1) MergeIfValid(nCurrentPos, nCurrentPos + 1, groups, invalidSet);
 
         if(x != GetSizeX() - 1)
         {
-            if(y != 0) MergeIfValid(nCurrentPos, nCurrentPos + GetSizeY() - 1, groups);
-            MergeIfValid(nCurrentPos, nCurrentPos + GetSizeY(), groups);
-            if(y != GetSizeY() - 1) MergeIfValid(nCurrentPos, nCurrentPos + GetSizeY() + 1, groups);
+            if(y != 0) MergeIfValid(nCurrentPos, nCurrentPos + GetSizeY() - 1, groups, invalidSet);
+            MergeIfValid(nCurrentPos, nCurrentPos + GetSizeY(), groups, invalidSet);
+            if(y != GetSizeY() - 1) MergeIfValid(nCurrentPos, nCurrentPos + GetSizeY() + 1, groups, invalidSet);
         }
     }
 
-    void Room::MergeIfValid(size_t source, size_t destination, Utility::DisjointSet& groups)
+    void Room::MergeIfValid(size_t source, size_t destination, Utility::DisjointSet& groups, const std::set<TileType>& invalidTypes)
     {
         const auto pTile = GetTile(destination);
-        if(pTile && !pTile->isSolid())
+        if(pTile && invalidTypes.find(pTile->GetTileType()) == end(invalidTypes))
         {
             groups.merge(source, destination);
         }
@@ -374,8 +374,8 @@ namespace INF4215_TP3
         size_t y;
         do
         {
-            x = Game::Instance().GetRandom() % (GetSizeX() - 1);
-            y = Game::Instance().GetRandom() % (GetSizeY() - 1);
+            x = Game::Instance().GetRandom() % GetSizeX();
+            y = Game::Instance().GetRandom() % GetSizeY();
         }while(GetTile(x, y)->GetTileType() != TileType::Floor);
 
         return static_cast<TileFloor*>(GetTile(x, y));
@@ -399,6 +399,19 @@ namespace INF4215_TP3
     const TileFloor* Room::GetRandomFloorTile() const
     {
         return const_cast<Room* const>(this)->GetRandomFloorTile();
+    }
+
+    const ITile* Room::GetRandomTreasureOrMonster() const
+    {
+        size_t x;
+        size_t y;
+        do
+        {
+            x = Game::Instance().GetRandom() % GetSizeX();
+            y = Game::Instance().GetRandom() % GetSizeY();
+        }while(GetTile(x, y)->GetTileType() != TileType::Monster && GetTile(x, y)->GetTileType() != TileType::Treasure);
+
+        return GetTile(x, y);
     }
 
     const Player& Room::GetOtherPlayer(const Player& player) const noexcept
