@@ -949,12 +949,13 @@
 1429305855 c:\users\jonusiv\documents\École\h2015\ai tp3\src\controller.h
 	<memory>
 
-1429113280 c:\users\jonusiv\documents\École\h2015\ai tp3\src\game.h
+1429316198 c:\users\jonusiv\documents\École\h2015\ai tp3\src\game.h
 	<SFML/Graphics.hpp>
 	<vector>
 	<exception>
 	<memory>
 	<random>
+	<chrono>
 
 1429047235 c:\users\jonusiv\documents\École\h2015\ai tp3\lib\sfml-2.2\include\sfml\graphics.hpp
 	<SFML/Window.hpp>
@@ -1395,7 +1396,7 @@
 	"Player.h"
 	<mutex>
 
-1429301178 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\game.cpp
+1429316198 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\game.cpp
 	"Game.h"
 	"Room.h"
 	"Tile.h"
@@ -1460,7 +1461,7 @@
 	"TileTreasure.h"
 	"TileMonster.h"
 
-1429301179 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\ketrud\astar.cpp
+1429316198 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\ketrud\astar.cpp
 	"ketrud/AStar.h"
 	<queue>
 	"Room.h"
@@ -1476,7 +1477,7 @@
 	<memory>
 	<SFML/System/Vector2.hpp>
 
-1429301179 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\ketrud\controllerai.cpp
+1429316198 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\ketrud\controllerai.cpp
 	"ketrud/ControllerAI.h"
 	"ketrud/StateGame.h"
 	"Game.h"
@@ -1487,7 +1488,7 @@
 	"TileMonster.h"
 	<limits>
 
-1429301179 c:\users\jonusiv\documents\École\h2015\ai tp3\src\ketrud\controllerai.h
+1429316198 c:\users\jonusiv\documents\École\h2015\ai tp3\src\ketrud\controllerai.h
 	<unordered_map>
 	<unordered_set>
 	<functional>
@@ -1526,7 +1527,7 @@
 	<cmath>
 	<cassert>
 
-1429311799 c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\controllerai.h
+1429317223 c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\controllerai.h
 	"Controller.h"
 	"TileTreasure.h"
 	"StateAction.h"
@@ -1540,7 +1541,7 @@
 1429047236 c:\users\jonusiv\documents\École\h2015\ai tp3\src\interpolation.h
 	<SFML/System/Vector2.hpp>
 
-1429301179 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\room.cpp
+1429316198 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\room.cpp
 	"Room.h"
 	"Tile.h"
 	"TileFloor.h"
@@ -1558,7 +1559,7 @@
 1429047236 c:\users\jonusiv\documents\École\h2015\ai tp3\src\disjointset.h
 	<memory>
 
-1429314140 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\controllerai.cpp
+1429317469 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\controllerai.cpp
 	"ControllerAI.h"
 	"Game.h"
 	"Player.h"
