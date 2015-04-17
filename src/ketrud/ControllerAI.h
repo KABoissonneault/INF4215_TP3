@@ -89,6 +89,7 @@ namespace INF4215_TP3
 
             void SearchNewGoal();
             void SetGoal(const Goal& goal);
+            Goal GetRandomGoal();
             bool IsGoalReached() const
             {
                 return m_pCurrentGoal && m_pathFinder.IsReached();

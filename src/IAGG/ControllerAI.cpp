@@ -97,35 +97,6 @@ namespace INF4215_TP3
         return action;
     }
 
-    unsigned ControllerAI::CompareStrength()
-    {
-        //Retourne un nombre positif si le joueur du joueur est plus grande que la force de l'autre joueur
-        return m_Player.GetWeapon() - OtherPlayer.GetWeapon();
-    }
-
-    const TileTreasure* ControllerAI::NearestTreasure()
-    {
-        auto& room = m_Player.GetRoom();
-        const TileTreasure* nearestTreasure;
-        for(size_t i = 0; i < room.GetTileCount(); ++i)
-        {
-            if(room.GetTile(i)->isTreasure())
-            {
-                //TODO calculer distance
-                nearestTreasure = dynamic_cast<const TileTreasure*>(room.GetTile(i));
-            }
-        }
-
-        return nearestTreasure;
-    }
-
-    unsigned ControllerAI::PathFinding(ITile* tile)
-    {
-        sf::Vector2i pos = m_Player.GetPosition();
-        return 3;
-    }
-
-
      void ControllerAI::OnGameEnd(bool hasWon)
      {
          StateAction sa = StateAction(*currentState,currentTarget);

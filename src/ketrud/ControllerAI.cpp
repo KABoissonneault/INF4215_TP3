@@ -167,7 +167,14 @@ namespace INF4215_TP3
                 }
             }
 
-            return currentMaxGoal;
+            if(fMaxQ == std::numeric_limits<double>::min())
+            {
+                return GetRandomGoal();
+            }
+            else
+            {
+                return currentMaxGoal;
+            }
         }
 
         double ControllerAI::GetMaxQValue(const StateGame& desiredState)
@@ -189,7 +196,14 @@ namespace INF4215_TP3
                 }
             }
 
-            return fMaxQ;
+            if(fMaxQ == std::numeric_limits<double>::min())
+            {
+                return 0.0;
+            }
+            else
+            {
+                return fMaxQ;
+            }
         }
 
         bool ControllerAI::IsGoalValid() const
@@ -225,29 +239,35 @@ namespace INF4215_TP3
             const double v = dist(engine);
             if(v < epsilon)
             {
-                const ITile* pTile;
-                while(true)
-                {
-                    pTile = GetRoom().GetRandomTreasureOrMonster();
-                    if(pTile->GetTileType() == TileType::Treasure)
-                    {
-                        auto pTreasure = static_cast<const TileTreasure*>(pTile);
-                        if(!pTreasure->isEmpty())
-                            break;
-                    }
-                    else
-                    {
-                        auto pMonster = static_cast<const TileMonster*>(pTile);
-                        if(!pMonster->isEmpty())
-                            break;
-                    }
-                }
-                return {{pTile->GetPosition()}};
+                return GetRandomGoal();
             }
             else
             {
                 return GetMaxQGoal(*GetCurrentState());
             }
+        }
+
+        Goal ControllerAI::GetRandomGoal()
+        {
+            const ITile* pTile;
+            while(true)
+            {
+                pTile = GetRoom().GetRandomTreasureOrMonster();
+                if(pTile->GetTileType() == TileType::Treasure)
+                {
+                    auto pTreasure = static_cast<const TileTreasure*>(pTile);
+                    if(!pTreasure->isEmpty())
+                        break;
+                }
+                else
+                {
+                    auto pMonster = static_cast<const TileMonster*>(pTile);
+                    if(!pMonster->isEmpty())
+                        break;
+                }
+            }
+
+            return {{pTile->GetPosition()}};
         }
     }
 }

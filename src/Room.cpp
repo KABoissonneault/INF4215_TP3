@@ -38,7 +38,7 @@ namespace INF4215_TP3
         else
         {
             m_apPlayers[0].reset(new Player(*this, Player::ID::Player1, Player::ControllerType::AI_Type1, {0,0}));
-            m_apPlayers[1].reset(new Player(*this, Player::ID::Player2, Player::ControllerType::AI_Type1, {0,0}));
+            m_apPlayers[1].reset(new Player(*this, Player::ID::Player2, Player::ControllerType::AI_Type2, {0,0}));
         }
 
     }

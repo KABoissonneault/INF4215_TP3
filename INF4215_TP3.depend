@@ -361,7 +361,7 @@
 	<exception>
 	<vector>
 
-1429306144 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\game.h
+1429312166 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\game.h
 	<SFML/Graphics.hpp>
 	<vector>
 	<exception>
@@ -722,7 +722,7 @@
 	<string>
 	<vector>
 
-1429307487 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\room.cpp
+1429311600 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\room.cpp
 	"Room.h"
 	"Tile.h"
 	"TileFloor.h"
@@ -782,12 +782,13 @@
 1428182483 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\disjointset.h
 	<memory>
 
-1429217854 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\player.cpp
+1429311391 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\player.cpp
 	"Player.h"
 	"Action.h"
 	"Controller.h"
 	"ControllerInput.h"
 	"ControllerInputAlt.h"
+	"IAGG/ControllerAI.h"
 	"Room.h"
 	"Tile.h"
 	"Interpolation.h"
@@ -797,7 +798,7 @@
 	<cmath>
 	<cassert>
 
-1429125753 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\player.h
+1429311391 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\player.h
 	<SFML/Graphics.hpp>
 	<memory>
 	<list>
@@ -808,7 +809,7 @@
 	<vector>
 	<functional>
 
-1429214833 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\controller.h
+1429311391 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\controller.h
 	<memory>
 
 1428888697 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\controllerinput.cpp
@@ -825,7 +826,7 @@
 	<memory>
 	<cassert>
 
-1429231506 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\gamehandler.cpp
+1429311391 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\gamehandler.cpp
 	"GameHandler.h"
 	"Player.h"
 	"Room.h"
@@ -886,7 +887,7 @@
 1428888363 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\controllerinputalt.h
 	"Controller.h"
 
-1429230957 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\controllerai.cpp
+1429312064 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\controllerai.cpp
 	"ketrud/ControllerAI.h"
 	"ketrud/StateGame.h"
 	"Game.h"
@@ -897,7 +898,7 @@
 	"TileMonster.h"
 	<limits>
 
-1429229704 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\controllerai.h
+1429311910 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\controllerai.h
 	<unordered_map>
 	<unordered_set>
 	<functional>
@@ -1576,4 +1577,64 @@
 
 1429302475 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\qnode.cpp
 	"QNode.h"
+
+1429311391 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\iagg\qnode.cpp
+	"QNode.h"
+
+1429311391 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\iagg\qnode.h
+
+1429311391 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\iagg\state.cpp
+	"State.h"
+	"StateNode.h"
+	"Player.h"
+	"Room.h"
+	"TileTreasure.h"
+	"TileMonster.h"
+	"Tile.h"
+	"Action.h"
+	"ketrud/AStar.h"
+
+1429311391 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\iagg\state.h
+	<vector>
+	"Action.h"
+	"StateNode.h"
+
+1429311391 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\iagg\statenode.h
+	"Tile.h"
+	"Action.h"
+
+1429311391 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\iagg\statenode.cpp
+	"StateNode.h"
+	"Game.h"
+	"Player.h"
+	"Action.h"
+	"Room.h"
+	"TileTreasure.h"
+	"TileMonster.h"
+
+1429311563 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\iagg\controllerai.h
+	"Controller.h"
+	"TileTreasure.h"
+	"StateAction.h"
+	<map>
+	"AStar.h"
+
+1429311391 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\iagg\stateaction.h
+	"State.h"
+	"Action.h"
+
+1429311550 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\iagg\controllerai.cpp
+	"ControllerAI.h"
+	"Game.h"
+	"Player.h"
+	"Action.h"
+	"Room.h"
+	"State.h"
+	"StateNode.h"
+	"Action.h"
+	"StateAction.h"
+	"Qnode.h"
+	"AStar.h"
+	<vector>
+	<list>
 

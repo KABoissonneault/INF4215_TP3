@@ -25,9 +25,6 @@ namespace INF4215_TP3
 
         protected:
         private:
-            unsigned CompareStrength();
-            const TileTreasure* NearestTreasure();
-            unsigned PathFinding(ITile* tile);
             const Player& OtherPlayer;
             std::map<StateAction,QNode, StateActionComparator> LearningNodes;
             unsigned alpha;

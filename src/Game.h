@@ -119,7 +119,7 @@ namespace INF4215_TP3
         unsigned m_nMapSizeY;
         unsigned m_nWantedSeed;
         unsigned m_nTrailMaxLength;
-        unsigned m_nMSMinimumDelay;
+        unsigned m_nMSMinimumDelay{50};
         unsigned m_nSimCount{};
         bool m_bDebug;
         bool m_bInput{false};
