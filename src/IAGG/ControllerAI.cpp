@@ -9,6 +9,7 @@
 #include "Action.h"
 #include "StateAction.h"
 #include "Qnode.h"
+#include "AStar.h"
 
 #include <vector>
 #include <list>
@@ -16,60 +17,83 @@
 
 namespace INF4215_TP3
 {
+    const float GAMMA = 0.9f;
+    //const float epsilon = 0.1f;
+
     ControllerAI::ControllerAI(const Player& player, const Player& other)
-    : IController(player), OtherPlayer{other}
+    : IController(player), OtherPlayer{other}, currentState{}, pathfinder(player.GetRoom(), player)
     {
+
 
     }
 
     std::unique_ptr<Action> ControllerAI::ChooseAction()
     {
         State* state = new State(m_Player);
-        std::unique_ptr<Action> action = std::unique_ptr<Action>{ new Action{ m_Player, Action::Direction::Idle } };
+        unsigned Target = state->Count() - 1;
         //std::uniform_real_distribution<float> distribution(0,1);
+
+
+        //Check for reward
+        // Way to know if won.
 
         int r = rand();
 
         //CHIFFRE ENTRE 0 ET 1
         float v = (r % 1000) / 1000.0f;
 
-        if(v < epsilon)
+        int maxQ = 0;
+        for ( unsigned tempTarget = 0; tempTarget < state->Count(); tempTarget++)
         {
-            //Choisir action aléatoire
-            bool ActionValide = true;
-            do
-            {
-                int act = rand();
-                action = std::unique_ptr<Action>{ new Action{ m_Player, Action::Direction(act % 8) } };
 
-                auto tile = m_Player.GetRoom().GetTile(action->GetResultingPosition());
-                if(tile->isSolid())
-                {
-                    ActionValide = false;
-                }
-                else
-                {
-                    ActionValide = true;
-                }
-
-            }
-            while(ActionValide);
+                 float q = this->GetNode(*state,tempTarget).getQ();
+                 if(q > maxQ)
+                 {
+                     maxQ = q;
+                     Target = tempTarget;
+                 }
 
         }
-        else
+
+
+        if( Target != currentTarget && v < GetNode(*state, Target).getA())
         {
-            //Choisir la meilleure action
+            Target = rand() % state->Count();
+        }
 
+        //Set Q of last StateAction
+        if(this->currentState)
+        {
+            QNode currentNode = GetNode(*currentState,currentTarget);
+            currentNode.setQ
+            (
+                currentNode.getQ() +
+                currentNode.getA() * (GAMMA * (maxQ - currentNode.getQ()))
+            );
+        }
 
-            auto listActions = Action::GetDirections();
-
-            for ( std::vector<Action::Direction>::iterator iter = listActions.begin(); iter != listActions.end(); ++iter)
+        Action::Direction direc;
+        //Aller vers le target
+        if (Target != this->currentTarget || this->currentState)
+        {
+            if(!pathfinder.FindPath(m_Player.GetPosition(), state->GetPosition(Target)))
             {
-                //Checker tous les actions et chjoisir la meilleur possible
-
+                direc = Action::Direction::Idle;
+            }
+        }
+        if(!pathfinder.PopDirection(direc))
+        {
+            pathfinder.FindPath(m_Player.GetPosition(), state->GetPosition(Target));
+            if(!pathfinder.PopDirection(direc))
+            {
+                direc = Action::Direction::Idle;
             }
         }
 
+        std::unique_ptr<Action> action = std::unique_ptr<Action>{ new Action{ m_Player, direc } };
+
+        this->currentState = state;
+        this->currentTarget = Target;
         return action;
     }
 
@@ -101,26 +125,48 @@ namespace INF4215_TP3
         return 3;
     }
 
+
+     void ControllerAI::OnGameEnd(bool hasWon)
+     {
+         StateAction sa = StateAction(*currentState,currentTarget);
+         this->LearningNodes[sa].setQ( hasWon? 100: -100);
+     }
+/*
     float ControllerAI::GetQ(State state, Action action)
     {
-        return LearningNodes[StateAction(state, action)].Q;
+        return LearningNodes[StateAction(state, action)].getQ();
     }
 
     float ControllerAI::GetA(State state, Action action)
     {
-        return LearningNodes[StateAction(state, action)].A;
+        return LearningNodes[StateAction(state, action)].getA();
     }
 
     float ControllerAI::GetN(State state, Action action)
     {
-        return LearningNodes[StateAction(state, action)].N;
+        return LearningNodes[StateAction(state, action)].getN();
     }
 
     void ControllerAI::SetQ(State state, Action action, float q)
     {
-        LearningNodes[StateAction(state,action)].Q = q;
+        if(LearningNodes.c)
+        LearningNodes[StateAction(state,action)].setQ(q);
     }
+*/
 
+    QNode ControllerAI::GetNode(State state, unsigned target)
+    {
+        StateAction sa = StateAction(state,target);
+        std::map<StateAction,QNode>::iterator it = this->LearningNodes.find(sa);
+        if(it == this->LearningNodes.end())
+        {
+            this->LearningNodes[sa] = QNode();
+        }
+        return this->LearningNodes[sa];
+
+
+    }
+/*
     void ControllerAI::SetA(State state, Action action, float a)
     {
         LearningNodes[StateAction(state,action)].A = a;
@@ -130,5 +176,5 @@ namespace INF4215_TP3
     {
         LearningNodes[StateAction(state,action)].N = n;
     }
-
+*/
 }

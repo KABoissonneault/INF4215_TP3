@@ -11,10 +11,10 @@ namespace INF4215_TP3
     struct StateAction
     {
         State m_state;
-        Action m_action;
+        unsigned m_target;
 
-        StateAction(State state, Action action)
-        :m_state(state), m_action(action)
+        StateAction(State state, unsigned target)
+        :m_state(state), m_target(target)
         {
 
         }
@@ -24,7 +24,7 @@ namespace INF4215_TP3
     {
         bool operator()(StateAction lhs, StateAction rhs) const
         {
-            return lhs.m_state == rhs.m_state && rhs.m_action == lhs.m_action;
+            return lhs.m_state == rhs.m_state && rhs.m_target == lhs.m_target;
         }
     };
 }

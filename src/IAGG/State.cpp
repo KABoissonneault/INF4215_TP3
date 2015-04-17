@@ -6,6 +6,7 @@
 #include "TileMonster.h"
 #include "Tile.h"
 #include "Action.h"
+#include "ketrud/AStar.h"
 
 namespace INF4215_TP3
 {
@@ -34,16 +35,24 @@ namespace INF4215_TP3
             {
             case TileType::Treasure:
                 {
-                    StateNode* node = new StateNode(dynamic_cast<const TileTreasure*>(tile));
-                    CalculatePath(node, tile);
-                    listNodes.push_back(*node);
+                    auto pTreasure = static_cast<const TileTreasure*>(tile);
+                    if(!pTreasure->isEmpty())
+                    {
+                        StateNode* node = new StateNode(pTreasure);
+                        CalculatePath(node, tile);
+                        listNodes.push_back(*node);
+                    }
                     break;
                 }
             case TileType::Monster:
                 {
-                   StateNode* node = new StateNode(dynamic_cast<const TileMonster*>(tile));
-                    CalculatePath(node, tile);
-                    listNodes.push_back(*node);
+                   auto pMonster = static_cast<const TileMonster*>(tile);
+                   if(!pMonster->isEmpty())
+                   {
+                        StateNode* node = new StateNode(pMonster);
+                        CalculatePath(node, tile);
+                        listNodes.push_back(*node);
+                   }
                     break;
                 }
             case TileType::Floor:
@@ -55,6 +64,10 @@ namespace INF4215_TP3
             }
         }
     }
+
+
+
+
 
     void State::CalculatePath(StateNode* node, const ITile* tile)
     {
@@ -69,6 +82,9 @@ namespace INF4215_TP3
 
         float distance = sqrt(pow(float(Diff.x), 2) + pow(float(Diff.y), 2));
         node->SetDistance(int(distance));
+
+
+
     }
 
     Action::Direction State::DirectionFinding(const sf::Vector2i Diff)

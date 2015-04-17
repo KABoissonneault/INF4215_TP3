@@ -74,8 +74,24 @@ namespace INF4215_TP3
         GetPlayer(1).OnTurnEnd();
         GetPlayer(2).OnTurnEnd();
 
+
+
+
+
         if(GetRoom().IsOver())
         {
+            //Check for winner
+            if(GetPlayer(1).GetTreasure() > GetPlayer(2).GetTreasure())
+            {
+                GetPlayer(1).OnGameEnd(true);
+                GetPlayer(2).OnGameEnd(false);
+            }
+            else
+            {
+                GetPlayer(1).OnGameEnd(false);
+                GetPlayer(2).OnGameEnd(true);
+            }
+
             std::cout << std::endl;
             std::cout << "Partie terminee." << std::endl;
             std::cout << "Gagnant: " << (GetPlayer(1).GetTreasure() > GetPlayer(2).GetTreasure() ? "Joueur 1" :

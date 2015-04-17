@@ -4,6 +4,7 @@
 #include "TileTreasure.h"
 #include "StateAction.h"
 #include <map>
+#include "AStar.h"
 
 namespace INF4215_TP3
 {
@@ -18,13 +19,10 @@ namespace INF4215_TP3
         public:
             ControllerAI(const Player& player, const Player& other);
             virtual std::unique_ptr<Action> ChooseAction() override;
-            float GetQ(State, Action);
-            float GetA(State,Action);
-            float GetN(State,Action);
+            QNode GetNode(State state, unsigned target);
 
-            void SetQ(State, Action, float);
-            void SetA(State,Action, float);
-            void SetN(State,Action, float);
+            virtual void OnGameEnd(bool hasWon) override;
+
         protected:
         private:
             unsigned CompareStrength();
@@ -33,9 +31,12 @@ namespace INF4215_TP3
             const Player& OtherPlayer;
             std::map<StateAction,QNode, StateActionComparator> LearningNodes;
             unsigned alpha;
-            //State currentState;
+            State* currentState;
+            unsigned currentTarget;
 
-            const float epsilon = 0.2f;
+            Ketrud::AStar pathfinder;
+
+
     };
 }
 

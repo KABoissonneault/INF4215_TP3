@@ -174,6 +174,11 @@ namespace INF4215_TP3
         m_pController->OnTurnEnd();
     }
 
+    void Player::OnGameEnd(bool hasWon)
+    {
+        m_pController->OnGameEnd(hasWon);
+    }
+
     void Player::AddTrail(const Action& action)
     {
         const unsigned knMaxTrail = Game::Instance().GetMaxTrail();

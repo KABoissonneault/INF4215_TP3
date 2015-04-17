@@ -944,7 +944,7 @@
 1429047236 c:\users\jonusiv\documents\École\h2015\ai tp3\src\controllerinput.h
 	"Controller.h"
 
-1429301178 c:\users\jonusiv\documents\École\h2015\ai tp3\src\controller.h
+1429305855 c:\users\jonusiv\documents\École\h2015\ai tp3\src\controller.h
 	<memory>
 
 1429113280 c:\users\jonusiv\documents\École\h2015\ai tp3\src\game.h
@@ -1307,7 +1307,7 @@
 	<string>
 	<vector>
 
-1429301179 c:\users\jonusiv\documents\École\h2015\ai tp3\src\player.h
+1429306549 c:\users\jonusiv\documents\École\h2015\ai tp3\src\player.h
 	<SFML/Graphics.hpp>
 	<memory>
 	<list>
@@ -1410,7 +1410,7 @@
 	<memory>
 	<cassert>
 
-1429301178 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\gamehandler.cpp
+1429306594 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\gamehandler.cpp
 	"GameHandler.h"
 	"Player.h"
 	"Room.h"
@@ -1429,7 +1429,7 @@
 	<SFML/System/Vector2.hpp>
 	<cmath>
 
-1429140635 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\state.cpp
+1429314500 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\state.cpp
 	"State.h"
 	"StateNode.h"
 	"Player.h"
@@ -1438,17 +1438,18 @@
 	"TileMonster.h"
 	"Tile.h"
 	"Action.h"
+	"ketrud/AStar.h"
 
-1429140349 c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\state.h
-	<list>
+1429312608 c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\state.h
+	<vector>
 	"Action.h"
 	"StateNode.h"
 
-1429140151 c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\statenode.h
+1429312280 c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\statenode.h
 	"Tile.h"
 	"Action.h"
 
-1429140283 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\statenode.cpp
+1429314140 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\statenode.cpp
 	"StateNode.h"
 	"Game.h"
 	"Player.h"
@@ -1507,7 +1508,7 @@
 	"TileMonster.h"
 	<SFML/System/Vector2.hpp>
 
-1429301179 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\player.cpp
+1429306612 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\player.cpp
 	"Player.h"
 	"Action.h"
 	"Controller.h"
@@ -1523,13 +1524,14 @@
 	<cmath>
 	<cassert>
 
-1429141210 c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\controllerai.h
+1429311799 c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\controllerai.h
 	"Controller.h"
 	"TileTreasure.h"
 	"StateAction.h"
 	<map>
+	"AStar.h"
 
-1429138591 c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\stateaction.h
+1429311197 c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\stateaction.h
 	"State.h"
 	"Action.h"
 
@@ -1554,7 +1556,7 @@
 1429047236 c:\users\jonusiv\documents\École\h2015\ai tp3\src\disjointset.h
 	<memory>
 
-1429301600 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\controllerai.cpp
+1429314140 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\controllerai.cpp
 	"ControllerAI.h"
 	"Game.h"
 	"Player.h"
@@ -1565,8 +1567,12 @@
 	"Action.h"
 	"StateAction.h"
 	"Qnode.h"
+	"AStar.h"
 	<vector>
 	<list>
 
-1429134563 c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\qnode.h
+1429302518 c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\qnode.h
+
+1429302475 source:c:\users\jonusiv\documents\École\h2015\ai tp3\src\iagg\qnode.cpp
+	"QNode.h"
 

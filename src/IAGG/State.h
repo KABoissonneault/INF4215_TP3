@@ -1,6 +1,6 @@
 #pragma once
 
-#include <list>
+#include <vector>
 #include "Action.h"
 #include "StateNode.h"
 
@@ -18,13 +18,22 @@ namespace INF4215_TP3
 
             bool operator==(const State lhs) const;
 
+            unsigned Count()
+            {
+                return listNodes.size();
+            }
+            sf::Vector2i GetPosition(unsigned index)
+            {
+                return listNodes[index].GetPosition();
+            }
+
         protected:
             void InitializeState(const Player& player);
             void CalculatePath(StateNode* node, const ITile* tile);
 
         private:
             Action::Direction DirectionFinding(const sf::Vector2i pos);
-            std::list<StateNode> listNodes;
+            std::vector<StateNode> listNodes;
             unsigned treasure;
             unsigned strength;
             const Player& m_player;

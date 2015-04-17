@@ -29,6 +29,7 @@ namespace INF4215_TP3
             Action::Direction GetDirection();
             unsigned GetDistance();
             NodeType GetType();
+            sf::Vector2i GetPosition();
 
             void SetDirection(Action::Direction direc);
             void SetDistance(unsigned dist);
@@ -43,6 +44,7 @@ namespace INF4215_TP3
             NodeType type;
             unsigned weapon;
             unsigned treasure;
+            sf::Vector2i position;
     };
 
     bool operator<(const StateNode& lhs, const StateNode& rhs);

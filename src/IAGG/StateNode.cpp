@@ -26,6 +26,7 @@ namespace INF4215_TP3
         treasure = tile->GetTreasureValue();
         weapon = tile->GetWeaponValue();
         type = NodeType::NodeTreasure;
+        position = tile->GetPosition();
     }
 
     StateNode::StateNode(const TileMonster* tile)
@@ -33,6 +34,7 @@ namespace INF4215_TP3
         treasure = tile->GetTreasureValue();
         weapon = tile->GetStrength();
         type = NodeType::NodeMonster;
+        position = tile->GetPosition();
     }
 
     StateNode::StateNode(const Player* player)
@@ -40,6 +42,7 @@ namespace INF4215_TP3
         treasure = player->GetTreasure();
         weapon = player->GetWeapon();
         type = NodeType::NodePlayer;
+        position = player->GetPosition();
     }
 
     unsigned StateNode::GetTreasure()
@@ -85,5 +88,10 @@ namespace INF4215_TP3
     bool StateNode::operator==(const StateNode& rhs) const
     {
         return this->distance == rhs.distance;
+    }
+
+    sf::Vector2i StateNode::GetPosition()
+    {
+         return position;
     }
 }
