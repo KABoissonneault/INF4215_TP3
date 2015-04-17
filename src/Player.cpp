@@ -4,6 +4,7 @@
 #include "Controller.h"
 #include "ControllerInput.h"
 #include "ControllerInputAlt.h"
+#include "IAGG/ControllerAI.h"
 #include "Room.h"
 #include "Tile.h"
 #include "Interpolation.h"
@@ -43,6 +44,10 @@ namespace INF4215_TP3
 
         }
         // TODO: Other controllers
+        else if(eControlType == ControllerType::AI_Type2)
+        {
+            m_pController.reset( new ControllerAI(*this, m_Room.GetOtherPlayer(*this)) );
+        }
         else
         {
             assert(false && "Not implemented");

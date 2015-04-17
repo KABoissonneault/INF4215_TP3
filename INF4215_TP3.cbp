@@ -14,6 +14,8 @@
 				<Option parameters="window_size 1024 768 size 30 22 max_trail 8 debug" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="include" />
+					<Add directory="src/IAGG" />
 				</Compiler>
 				<Linker>
 					<Add library="sfml-graphics-d" />
@@ -28,6 +30,8 @@
 				<Option compiler="mingw-w64" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
+					<Add directory="src/IAGG" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -41,6 +45,7 @@
 			<Add option="-Wall" />
 			<Add directory="./lib/SFML-2.2/include" />
 			<Add directory="./src" />
+			<Add directory="./src/IAGG" />
 		</Compiler>
 		<Linker>
 			<Add library="mingw32" />
@@ -64,6 +69,14 @@
 		<Unit filename="src/Game.h" />
 		<Unit filename="src/GameHandler.cpp" />
 		<Unit filename="src/GameHandler.h" />
+		<Unit filename="src/IAGG/ControllerAI.cpp" />
+		<Unit filename="src/IAGG/ControllerAI.h" />
+		<Unit filename="src/IAGG/QNode.h" />
+		<Unit filename="src/IAGG/State.cpp" />
+		<Unit filename="src/IAGG/State.h" />
+		<Unit filename="src/IAGG/StateAction.h" />
+		<Unit filename="src/IAGG/StateNode.cpp" />
+		<Unit filename="src/IAGG/StateNode.h" />
 		<Unit filename="src/Interpolation.h" />
 		<Unit filename="src/Player.cpp" />
 		<Unit filename="src/Player.h" />
