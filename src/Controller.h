@@ -28,6 +28,7 @@ namespace INF4215_TP3
         virtual void OnStun(unsigned nTurnCount){ (void) nTurnCount; }
         virtual void OnTreasureChange(int nTreasureChange){ (void) nTreasureChange; }
         virtual void OnTurnEnd(){}
+        virtual void OnGameEnd(bool hasWon){ (void) hasWon;}
 
     protected:
         const Player& m_Player;

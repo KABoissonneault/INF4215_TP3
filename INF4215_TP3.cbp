@@ -65,6 +65,15 @@
 		<Unit filename="src/Game.h" />
 		<Unit filename="src/GameHandler.cpp" />
 		<Unit filename="src/GameHandler.h" />
+		<Unit filename="src/IAGG/ControllerAI.cpp" />
+		<Unit filename="src/IAGG/ControllerAI.h" />
+		<Unit filename="src/IAGG/QNode.cpp" />
+		<Unit filename="src/IAGG/QNode.h" />
+		<Unit filename="src/IAGG/State.cpp" />
+		<Unit filename="src/IAGG/State.h" />
+		<Unit filename="src/IAGG/StateAction.h" />
+		<Unit filename="src/IAGG/StateNode.cpp" />
+		<Unit filename="src/IAGG/StateNode.h" />
 		<Unit filename="src/Interpolation.h" />
 		<Unit filename="src/Player.cpp" />
 		<Unit filename="src/Player.h" />

@@ -4,6 +4,7 @@
 #include "Controller.h"
 #include "ControllerInput.h"
 #include "ControllerInputAlt.h"
+#include "IAGG/ControllerAI.h"
 #include "Room.h"
 #include "Tile.h"
 #include "Interpolation.h"
@@ -49,6 +50,10 @@ namespace INF4215_TP3
             m_pController.reset( new Ketrud::ControllerAI(*this) );
         }
         // TODO: Other controllers
+        else if(eControlType == ControllerType::AI_Type2)
+        {
+            m_pController.reset( new ControllerAI(*this, m_Room.GetOtherPlayer(*this)) );
+        }
         else
         {
             assert(false && "Not implemented");
@@ -167,6 +172,11 @@ namespace INF4215_TP3
     void Player::OnTurnEnd()
     {
         m_pController->OnTurnEnd();
+    }
+
+    void Player::OnGameEnd(bool hasWon)
+    {
+        m_pController->OnGameEnd(hasWon);
     }
 
     void Player::AddTrail(const Action& action)
