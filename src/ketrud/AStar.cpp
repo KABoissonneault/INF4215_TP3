@@ -4,6 +4,8 @@
 
 #include "Room.h"
 #include "Player.h"
+#include "TileTreasure.h"
+#include "TileMonster.h"
 
 namespace INF4215_TP3
 {
@@ -48,9 +50,9 @@ namespace INF4215_TP3
             double G;
             double H;
 
-            bool operator<(const NodeInfo& other) const noexcept
+            bool operator>(const NodeInfo& other) const noexcept
             {
-                return (G+H) < (other.G+other.H);
+                return (G+H) > (other.G+other.H);
             }
         };
 
@@ -61,14 +63,15 @@ namespace INF4215_TP3
             {
                 bool operator()(const std::shared_ptr<NodeInfo>& first, const std::shared_ptr<NodeInfo>& second) const noexcept
                 {
-                    return !(*first < *second);
+                    return (*first) > (*second);
                 }
             };
         }
 
 
-        AStar::AStar(const Room& room)
-            : m_Room{room}
+        AStar::AStar(const Room& room, const Player& player)
+            : m_Room{room},
+            m_Player{player}
         {
 
         }
@@ -94,6 +97,16 @@ namespace INF4215_TP3
         bool AStar::FindPath(const sf::Vector2i& sourcePos, const sf::Vector2i& destinationPos)
         {
             m_Destination = destinationPos;
+            while(m_pathDirections.size())
+            {
+                m_pathDirections.pop();
+            }
+
+            if(sourcePos == destinationPos)
+            {
+                m_pathDirections.push(Action::Direction::Idle);
+                return true;
+            }
 
             std::priority_queue<std::shared_ptr<NodeInfo>, std::vector<std::shared_ptr<NodeInfo>>, NodeInfoComparer> frontier;
             std::set<sf::Vector2i> visited;
@@ -109,10 +122,12 @@ namespace INF4215_TP3
 
                 if(nodeInfo->GetPosition() == m_Destination)
                 {
+                    m_nPathLength = nodeInfo->G;
+
                     m_pathDirections.push(nodeInfo->SourceDirection);
                     auto pParent = nodeInfo->Parent;
 
-                    while(pParent->Parent)
+                    while(pParent && pParent->Parent)
                     {
                         m_pathDirections.push(pParent->SourceDirection);
                         pParent = pParent->Parent;
@@ -164,7 +179,23 @@ namespace INF4215_TP3
 
         double AStar::GetNodeHeuristic(const Node& node)
         {
-            return Norm(m_Destination - node.Position);
+            double nHeuristic = Norm(m_Destination - node.Position);
+
+            auto pTile = GetRoom().GetTile(node.Position);
+            if(pTile->GetTileType() == TileType::Treasure)
+            {
+                auto pTreasure = static_cast<const TileTreasure*>(pTile);
+                nHeuristic -= pTreasure->GetTreasureValue()*16;
+                nHeuristic -= pTreasure->GetWeaponValue()*16;
+            }
+            else if(pTile->GetTileType() == TileType::Monster)
+            {
+                auto pMonster = static_cast<const TileMonster*>(pTile);
+                nHeuristic += (pMonster->GetStrength() - GetPlayer().GetWeapon() + 2) * 3;
+                nHeuristic -= (pMonster->GetTreasureValue());
+            }
+
+            return nHeuristic;
         }
 
         bool AStar::PopDirection(Action::Direction& eDir)

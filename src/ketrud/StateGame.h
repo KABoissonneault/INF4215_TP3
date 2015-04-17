@@ -17,7 +17,7 @@ namespace INF4215_TP3
         class StateGame
         {
         public:
-            StateGame(const Room&, const Player& player, const Player& otherPlayer);
+            StateGame(const Room&, const Player& player/*, const Player& otherPlayer*/);
             ~StateGame();
 
             bool operator==(const StateGame&) const;
@@ -32,16 +32,18 @@ namespace INF4215_TP3
                 return *m_pPlayer;
             }
 
+            /*
             const PlayerInfo& GetOtherPlayerInfo() const
             {
                 return *m_pOtherPlayer;
             }
+            */
             bool IsTerminal() const;
 
         private:
             std::vector<std::shared_ptr<const ITile>> m_vecTiles;
             std::unique_ptr<const PlayerInfo> m_pPlayer;
-            std::unique_ptr<const PlayerInfo> m_pOtherPlayer;
+            //std::unique_ptr<const PlayerInfo> m_pOtherPlayer;
         };
     }
 }

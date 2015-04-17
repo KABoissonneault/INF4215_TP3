@@ -31,7 +31,7 @@ namespace INF4215_TP3
         }
 
         m_apPlayers[0].reset(new Player(*this, Player::ID::Player1, Player::ControllerType::AI_Type1, {0,0}));
-        m_apPlayers[1].reset(new Player(*this, Player::ID::Player2, Player::ControllerType::Input, {0,0}));
+        m_apPlayers[1].reset(new Player(*this, Player::ID::Player2, Player::ControllerType::AI_Type2, {0,0}));
     }
 
     Room::~Room() = default;
@@ -374,8 +374,8 @@ namespace INF4215_TP3
         size_t y;
         do
         {
-            x = Game::Instance().GetRandom() % (GetSizeX() - 1);
-            y = Game::Instance().GetRandom() % (GetSizeY() - 1);
+            x = Game::Instance().GetRandom() % GetSizeX();
+            y = Game::Instance().GetRandom() % GetSizeY();
         }while(GetTile(x, y)->GetTileType() != TileType::Floor);
 
         return static_cast<TileFloor*>(GetTile(x, y));
@@ -399,6 +399,19 @@ namespace INF4215_TP3
     const TileFloor* Room::GetRandomFloorTile() const
     {
         return const_cast<Room* const>(this)->GetRandomFloorTile();
+    }
+
+    const ITile* Room::GetRandomTreasureOrMonster() const
+    {
+        size_t x;
+        size_t y;
+        do
+        {
+            x = Game::Instance().GetRandom() % GetSizeX();
+            y = Game::Instance().GetRandom() % GetSizeY();
+        }while(GetTile(x, y)->GetTileType() != TileType::Monster && GetTile(x, y)->GetTileType() != TileType::Treasure);
+
+        return GetTile(x, y);
     }
 
     const Player& Room::GetOtherPlayer(const Player& player) const noexcept

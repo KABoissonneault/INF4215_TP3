@@ -20,9 +20,9 @@ namespace INF4215_TP3
             unsigned WeaponCount;
         };
 
-        StateGame::StateGame(const Room& room, const Player& player, const Player& otherPlayer)
-            : m_pPlayer{new PlayerInfo{player.GetPosition(), player.GetTreasure(), player.GetWeapon()}},
-            m_pOtherPlayer{new PlayerInfo{otherPlayer.GetPosition(), otherPlayer.GetTreasure(), otherPlayer.GetWeapon()}}
+        StateGame::StateGame(const Room& room, const Player& player/*, const Player& otherPlayer*/)
+            : m_pPlayer{new PlayerInfo{player.GetPosition(), player.GetTreasure(), player.GetWeapon()}}//,
+            //m_pOtherPlayer{new PlayerInfo{otherPlayer.GetPosition(), otherPlayer.GetTreasure(), otherPlayer.GetWeapon()}}
         {
             for(size_t i = 0; i < room.GetTileCount(); ++i)
             {
@@ -84,10 +84,12 @@ namespace INF4215_TP3
                GetPlayerInfo().WeaponCount != other.GetPlayerInfo().WeaponCount)
                 return false;
 
+            /*
             if(GetOtherPlayerInfo().Position != other.GetOtherPlayerInfo().Position ||
                GetOtherPlayerInfo().TreasureCount != other.GetOtherPlayerInfo().TreasureCount ||
                GetOtherPlayerInfo().WeaponCount != other.GetOtherPlayerInfo().WeaponCount)
                 return false;
+            */
 
             return true;
         }
@@ -148,11 +150,13 @@ namespace std
         nRetHash ^= state.GetPlayerInfo().WeaponCount;
         nRetHash >>= 3;
 
+        /*
         nRetHash ^= state.GetOtherPlayerInfo().Position.x;
         nRetHash ^= state.GetOtherPlayerInfo().Position.y;
         nRetHash ^= state.GetOtherPlayerInfo().TreasureCount;
         nRetHash ^= state.GetOtherPlayerInfo().WeaponCount;
         nRetHash <<= 1;
+        */
 
         return nRetHash;
     }

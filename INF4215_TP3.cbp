@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="mingw-w64" />
-				<Option parameters="window_size 1024 768 size 30 22 max_trail 8 debug seed 553965881" />
+				<Option parameters="window_size 1024 768 size 30 22 max_trail 8 debug seed 809087318" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>

@@ -20,15 +20,28 @@ namespace INF4215_TP3
         class AStar
         {
         public:
-            AStar(const Room&);
+            AStar(const Room&, const Player&);
 
             bool FindPath(const sf::Vector2i& source, const sf::Vector2i& destination);
             bool PopDirection(Action::Direction& eDir);
+            size_t PathLength() const
+            {
+                return m_nPathLength;
+            }
+            bool IsReached() const
+            {
+                return m_pathDirections.size() == 0;
+            }
 
         private:
-            const Room& GetRoom()
+            const Room& GetRoom() const
             {
                 return m_Room;
+            }
+
+            const Player& GetPlayer() const
+            {
+                return m_Player;
             }
 
             void FindAndAddNeighbours(Node&);
@@ -40,7 +53,10 @@ namespace INF4215_TP3
 
             sf::Vector2i m_Destination;
 
+            size_t m_nPathLength;
+
             const Room& m_Room;
+            const Player& m_Player;
 
         };
     }

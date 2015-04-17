@@ -134,6 +134,8 @@ namespace INF4215_TP3
         TileFloor* GetRandomFloorTile();
         const TileFloor* GetRandomFloorTile() const;
 
+        const ITile* GetRandomTreasureOrMonster() const;
+
     private:
         void GenerateFloorsAndWalls(std::default_random_engine& engine);
         void GenerateTreasures(std::default_random_engine& engine);

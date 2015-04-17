@@ -721,7 +721,7 @@
 	<string>
 	<vector>
 
-1429215839 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\room.cpp
+1429231264 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\room.cpp
 	"Room.h"
 	"Tile.h"
 	"TileFloor.h"
@@ -736,7 +736,7 @@
 	<chrono>
 	<cmath>
 
-1429195170 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\room.h
+1429226448 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\room.h
 	"Tile.h"
 	<SFML/Graphics.hpp>
 	<set>
@@ -754,7 +754,7 @@
 	"Tile.h"
 	"Room.h"
 
-1429217473 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\game.cpp
+1429231615 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\game.cpp
 	"Game.h"
 	"Room.h"
 	"Tile.h"
@@ -781,7 +781,7 @@
 1428182483 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\disjointset.h
 	<memory>
 
-1429215045 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\player.cpp
+1429217854 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\player.cpp
 	"Player.h"
 	"Action.h"
 	"Controller.h"
@@ -824,7 +824,7 @@
 	<memory>
 	<cassert>
 
-1429125821 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\gamehandler.cpp
+1429231506 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\gamehandler.cpp
 	"GameHandler.h"
 	"Player.h"
 	"Room.h"
@@ -885,14 +885,18 @@
 1428888363 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\controllerinputalt.h
 	"Controller.h"
 
-1429216520 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\controllerai.cpp
+1429230957 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\controllerai.cpp
 	"ketrud/ControllerAI.h"
 	"ketrud/StateGame.h"
+	"Game.h"
 	"Player.h"
 	"Action.h"
 	"Room.h"
+	"TileTreasure.h"
+	"TileMonster.h"
+	<limits>
 
-1429215695 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\controllerai.h
+1429229704 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\controllerai.h
 	<unordered_map>
 	<unordered_set>
 	<functional>
@@ -901,12 +905,12 @@
 	"Player.h"
 	"ketrud/AStar.h"
 
-1429205706 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\stategame.h
+1429226712 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\stategame.h
 	<vector>
 	<memory>
 	<functional>
 
-1429198670 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\stategame.cpp
+1429226760 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\stategame.cpp
 	"ketrud/StateGame.h"
 	"Player.h"
 	"Room.h"
@@ -915,13 +919,15 @@
 	"TileMonster.h"
 	<SFML/System/Vector2.hpp>
 
-1429217782 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\astar.cpp
+1429228096 source:d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\astar.cpp
 	"ketrud/AStar.h"
 	<queue>
 	"Room.h"
 	"Player.h"
+	"TileTreasure.h"
+	"TileMonster.h"
 
-1429214112 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\astar.h
+1429228067 d:\my folder\ecole\universite\inf4215\inf4215_tp3\src\ketrud\astar.h
 	"Action.h"
 	"VectorOperations.h"
 	<map>

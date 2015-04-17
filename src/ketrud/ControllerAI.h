@@ -76,8 +76,24 @@ namespace INF4215_TP3
                 return m_funPolicy();
             }
 
-            std::shared_ptr<const StateGame> GetCurrentState();
+            std::shared_ptr<const StateGame> GenerateCurrentState();
+            std::shared_ptr<const StateGame> GetCurrentState() const
+            {
+                return m_pCurrentState;
+            }
+
             void SetQValue(std::shared_ptr<const StateGame>, const Goal&, double value);
+            double GetQValue(std::shared_ptr<const StateGame>, const Goal&);
+            Goal GetMaxQGoal(const StateGame&);
+            double GetMaxQValue(const StateGame&);
+
+            void SearchNewGoal();
+            void SetGoal(const Goal& goal);
+            bool IsGoalReached() const
+            {
+                return m_pCurrentGoal && m_pathFinder.IsReached();
+            }
+            bool IsGoalValid() const;
 
             const Room& GetRoom() const
             {

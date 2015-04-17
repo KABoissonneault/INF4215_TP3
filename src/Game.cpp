@@ -38,7 +38,7 @@ namespace INF4215_TP3
         m_aFrameLetters(knNumLetters, false),
         m_numberGenerator(std::chrono::system_clock::now().time_since_epoch().count()),
         m_bInitialized{false},
-        m_bPause{false},
+        m_bPause{true},
         m_nMapSizeX{5},
         m_nMapSizeY{5},
         m_nWantedSeed{knDefaultSeed},
