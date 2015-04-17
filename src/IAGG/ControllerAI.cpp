@@ -40,7 +40,7 @@ namespace INF4215_TP3
             do
             {
                 int act = rand();
-                action->ChosenDirection = Action::Direction(act % 8);
+                action = std::unique_ptr<Action>{ new Action{ m_Player, Action::Direction(act % 8) } };
 
                 auto tile = m_Player.GetRoom().GetTile(action->GetResultingPosition());
                 if(tile->isSolid())
