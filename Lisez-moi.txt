@@ -1,2 +1,5 @@
 Utilisez Run.bat pour runner le jeu sur Windows
 Si vous êtes sur Linux, va falloir compiler le jeu sur Linux avec des binaries Linux de SFML :S
+
+Au début, appuyez sur Espace pour commencer la partie. Quand une partie termine, appuyez encore sur Espace 
+pour en commencer une autre.
