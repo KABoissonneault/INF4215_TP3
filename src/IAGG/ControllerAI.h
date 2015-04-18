@@ -22,6 +22,7 @@ namespace INF4215_TP3
             QNode GetNode(State state, unsigned target);
 
             virtual void OnGameEnd(bool hasWon) override;
+            virtual void OnStun(unsigned nTurnCount) override;
 
         protected:
         private:
@@ -30,6 +31,7 @@ namespace INF4215_TP3
             unsigned alpha;
             State* currentState;
             unsigned currentTarget;
+            float currentReward;
 
             Ketrud::AStar pathfinder;
 

@@ -23,7 +23,7 @@ namespace INF4215_TP3
     ControllerAI::ControllerAI(const Player& player, const Player& other)
     : IController(player), OtherPlayer{other}, currentState{}, pathfinder(player.GetRoom(), player)
     {
-
+        currentReward = 0;
 
     }
 
@@ -56,7 +56,7 @@ namespace INF4215_TP3
         }
 
 
-        if( Target != currentTarget && v < GetNode(*state, Target).getA())
+        if( Target != currentTarget && maxQ == 0 )
         {
             Target = rand() % state->Count();
         }
@@ -68,7 +68,7 @@ namespace INF4215_TP3
             currentNode.setQ
             (
                 currentNode.getQ() +
-                currentNode.getA() * (GAMMA * (maxQ - currentNode.getQ()))
+                currentNode.getA() * (currentReward + GAMMA * (maxQ - currentNode.getQ()))
             );
         }
 
@@ -92,6 +92,7 @@ namespace INF4215_TP3
 
         std::unique_ptr<Action> action = std::unique_ptr<Action>{ new Action{ m_Player, direc } };
 
+        currentReward = 0;
         this->currentState = state;
         this->currentTarget = Target;
         return action;
@@ -101,6 +102,11 @@ namespace INF4215_TP3
      {
          StateAction sa = StateAction(*currentState,currentTarget);
          this->LearningNodes[sa].setQ( hasWon? 100: -100);
+     }
+
+     void ControllerAI::OnStun(unsigned nTurnCount)
+     {
+         currentReward = -10;
      }
 /*
     float ControllerAI::GetQ(State state, Action action)
