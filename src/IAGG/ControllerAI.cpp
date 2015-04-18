@@ -37,10 +37,10 @@ namespace INF4215_TP3
         //Check for reward
         // Way to know if won.
 
-        int r = rand();
+        //int r = rand();
 
         //CHIFFRE ENTRE 0 ET 1
-        float v = (r % 1000) / 1000.0f;
+        //float v = (r % 1000) / 1000.0f;
 
         int maxQ = 0;
         for ( unsigned tempTarget = 0; tempTarget < state->Count(); tempTarget++)
@@ -106,6 +106,7 @@ namespace INF4215_TP3
 
      void ControllerAI::OnStun(unsigned nTurnCount)
      {
+         (void) nTurnCount;
          currentReward = -10;
      }
 /*
