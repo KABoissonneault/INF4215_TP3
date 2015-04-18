@@ -1,0 +1,2 @@
+Utilisez Run.bat pour runner le jeu sur Windows
+Si vous êtes sur Linux, va falloir compiler le jeu sur Linux avec des binaries Linux de SFML :S
